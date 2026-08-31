@@ -32,6 +32,78 @@
         }
       ],
       "files": []
+    },
+    {
+      "id": "equal-xps-colours",
+      "prompt": "Use Python to compare two equally important sample spectra and their two fitted components. No auxiliary colours are requested.",
+      "expected_output": "Use only primary 1 (#666EB0 main) and primary 2 (#E0725E main), without inventing a control or hero. Use readable translucent peak gradients and outline edges, neutral raw points/total/background. No orange, teal or auxiliary violet. Use exact approved anchors and #4D4D4D framing.",
+      "files": []
+    },
+    {
+      "id": "category-overflow",
+      "prompt": "Use Python to compare five independent equal samples. Do not introduce additional colours without asking.",
+      "expected_output": "Do not silently cycle category colours, drop series, or add orange/teal/auxiliary violet. Resolve using markers, line styles or panels, or ask for colour extension.",
+      "files": []
+    },
+    {
+      "id": "signed-gradient-bars",
+      "prompt": "Use Python to make positive and negative bars, vertical and horizontal, with slight decorative gradients and editable SVG.",
+      "expected_output": "For all orientations the baseline end is lighter and the value end deeper, using equal relative tint spans. Preserve source values. Export native SVG gradients or disclose limits, plus a standalone script with centralized adjustable colours and opacity.",
+      "files": []
+    },
+    {
+      "id": "three-column-final-size",
+      "prompt": "Use Python to create a 180 mm wide three-panel figure with three-digit x ticks, a twin y axis and a colourbar.",
+      "expected_output": "Use final-size Arial 8/7.5/12 pt, 0.75 pt frames, 1.125 pt curves. Complete frames, one midpoint minor tick. Panel letters follow left/top axis anchors. Adjust decorated widths/positions; retain row top/bottom alignment.",
+      "files": []
+    },
+    {
+      "id": "stacked-correlated-errors",
+      "prompt": "Use Python to plot three stacked components with matched replicate measurements and error bars. Show the SD of cumulative boundaries.",
+      "expected_output": "Compute cumulative replicate sums before SD; retain covariance. Do not sum component SDs. Labels distinguish segment means from cumulative-boundary errors; preserve zero and show all error endpoints.",
+      "files": []
+    },
+    {
+      "id": "missing-arial",
+      "prompt": "Use Python with the default template; Arial is unavailable.",
+      "expected_output": "Report missing Arial instead of silently substituting or claiming font fidelity. Do all possible source preparation without a misleading rendered result.",
+      "files": []
+    },
+    {
+      "id": "standard-column-not-compromised-twin",
+      "prompt": "Use Python to stack b (ordinary), e (dual y axes), h (XRD heatmap and colourbar) in the same column. Keep visual alignment.",
+      "expected_output": "Establish the ordinary b frame right as the column reference. Narrow e for right-axis text while preserving its left and height. Align h colourbar RIGHT BORDER to b, not to e or the colourbar text envelope. Derive map width from bar/gap and inspect adjacent labels. If no ordinary reference exists, use a nominal grid boundary.",
+      "files": []
+    },
+    {
+      "id": "bar-margins-irregular-groups",
+      "prompt": "Use Python for grouped bars at irregular positions, with unequal group widths and no supplied x limits.",
+      "expected_output": "Keep actual centres/widths. Compute limits from all outer bar edges and add visible side margins; do not use only group centres or copy 180–820 from the preview. Include error endpoints and any other observations. Preserve explicit user limits when supplied.",
+      "files": []
+    },
+    {
+      "id": "paired-markers-versus-dense-spectra",
+      "prompt": "Use Python for a paired point-line plot plus a densely sampled XPS fit, arranged in three compact rows.",
+      "expected_output": "Point-line and corresponding legend markers are 4.5 pt with 0.6 pt edges; dense XPS raw markers are chosen separately. Row-frame gaps start at 12 mm including labels, not additional whitespace. Keep established fonts/strokes and never modify real trends for separation.",
+      "files": []
+    },
+    {
+      "id": "optional-gc-and-six-stacks",
+      "prompt": "Use Python for before/after GC and six-component stacked bars: lower three blue, upper three coral, deep-light-deep overall.",
+      "expected_output": "Grey GC baseline and main after trace, documented offsets, no divider, second-primary-main translucent same-time window only for a specified/observed peak. Stack primary 1 main-mid-light then primary 2 light-mid-main; per-segment values only when requested and uncertainty only if supplied. No change to family anchor colours.",
+      "files": []
+    },
+    {
+      "id": "four-layer-no-errors",
+      "prompt": "Use Python to plot three single-family bars with four components each, numeric segment labels, no error bars.",
+      "expected_output": "Use 12 segments, not four bars or three layers. Bottom-to-top exact primary-1 outline #3F3770, main #666EB0, mid #C5C5E0, light #DBDBDB. Keep neutral-grey light unchanged. No invented replicates or errors; retain zero, margins and contrasting numeric labels.",
+      "files": []
+    },
+    {
+      "id": "explicit-orange-xps",
+      "prompt": "Use Python for XPS with both primary families and orange; add two objects with two point-line measurements each.",
+      "expected_output": "Orange is allowed in the requested XPS, with visible outlines and translucent gradients. Paired lines use primary-1 main/mid #666EB0/#C5C5E0 and primary-2 main/mid #E0725E/#E0A988, filled/solid versus hollow/dashed, markers 4.5 pt. Do not add teal/violet or make orange a default.",
+      "files": []
     }
   ]
 }

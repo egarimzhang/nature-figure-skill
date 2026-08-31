@@ -1,281 +1,81 @@
-# Chart Types — Nature Figure Making
+# Chart-specific decisions
 
-Specialized chart patterns beyond basic bars and trends.
-Each section includes the key code pattern extracted from production scripts.
+Apply [layout-contract.md](layout-contract.md) and [color-contract.md](color-contract.md)
+first. User-requested chart types and panels are preserved.
 
----
+## Bars, stacks, errors
 
-## Radar / Polar Chart
+Bars retain zero; bounded percentages normally 0–100. Mid anchor, no outlines, mild
+gradient for ordinary bars, solid levels for stacks. About 50–60% category spacing for
+bar/group width; group gaps distinguish categories. Negative/horizontal gradients get
+deeper away from baseline. Compute side margins from actual outer bar/group edges; see
+layout-contract.md. Optional single-family three/four-layer and two-family six-layer recipes
+are in color-contract.md. Value labels are opt-in, not mandatory for every bar. Never
+conceal cropped bars or error endpoints.
 
-Used when comparing multiple methods across many benchmarks simultaneously.
+Errors: stroke/cap 0.75 pt, capsize 1.8 pt, alpha 1. Grey on bars; series colour on
+multi-series curves. Above fills/below points. Error definitions and n are supplied or
+explicitly agreed; no automatic SD/SEM substitution. A stacked boundary's uncertainty
+is uncertainty of a SUM, including covariance. Use matched replicate cumulative sums,
+provided cumulative intervals or a justified covariance model. Never add segment SDs.
+In style tests, disclose simulated replicates and demonstrate the calculation explicitly.
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+## Paired point-line curves
 
-def plot_radar(methods, colors, subtask_names, value_matrix,
-               benchmark_radii, display_range=(45, 90)):
-    """
-    Parameters
-    ----------
-    methods        : list[str]    — one curve per method
-    colors         : list[str]
-    subtask_names  : list[str]    — one spoke per subtask (may contain '\\n')
-    value_matrix   : np.ndarray  — shape (n_subtasks, n_methods)
-    benchmark_radii: dict         — {benchmark_name: [tick1, tick2, ...]} for normalization
-    display_range  : (r_min, r_max) — polar radial display window
-    """
-    r_lo, r_hi = display_range
-    n_subtasks = len(subtask_names)
-    n_methods  = len(methods)
+Use main + mid for two measurements of one object, supplemented by filled/open
+markers or deliberate line styles. Normal line width 1.125 pt, marker size 4.5 pt and
+edge 0.6 pt. Do not assign pale variants to unrelated categories. Raw samples, models
+and references need visibly distinct grammar, not invented smoothing/fitting. Match
+legend markers to the series size. Synthetic trend tests may emphasize different
+trajectories; never alter real observations to separate trajectories. Dense spectral raw
+points need their own size rather than inheriting the point-line default.
 
-    fig = plt.figure(figsize=(12, 10))
-    ax  = fig.add_subplot(111, projection='polar')
+## Before/after GC
 
-    # Evenly spaced angles, clockwise from top
-    angles = np.linspace(2 * np.pi, 0, n_subtasks, endpoint=False)
-    angles_closed = np.append(angles, angles[0])
+For an explicitly requested before/after comparison, use a readable grey reference
+and a main-colour after trace on the same retention-time scale with documented vertical
+offsets. The approved stacked comparison has no divider between the two traces. A
+translucent rectangle spanning the same retention-time window across both traces
+can highlight an emerging peak (second-primary main, alpha 0.35 is the approved starting point). Place it
+behind data with no border. Choose peak window/offset from the actual data, not the
+preview's 6.7 min peak or 1.18 offset. Do not invent peak identity or presence/absence.
 
-    def _normalize(val, bench):
-        radii_list = benchmark_radii.get(bench, [0, 100])
-        span = max(radii_list) - min(radii_list)
-        if span <= 0:
-            return (r_lo + r_hi) / 2
-        frac = np.clip((val - min(radii_list)) / span, 0, 1)
-        return r_lo + (r_hi - r_lo) * frac
+## Dual-axis bar/line combination
 
-    subtask_benchmarks = [s.split('\\n', 1)[-1] if '\\n' in s else s
-                          for s in subtask_names]
+For two specified metrics, a single-family bar series and a different single-family
+point-line series are available. Selectivity/conversion are bounded percentages unless
+otherwise specified. Use main for the line, mid-based gradients for bars, neutral axes,
+clear metric/axis mapping, and matching 4.5 pt legend markers. Keep left/height and fit
+right-axis text; never propagate this shortened frame as the column reference.
 
-    # Draw data polygons
-    for m in range(n_methods):
-        norm_vals = np.array([_normalize(value_matrix[i, m], subtask_benchmarks[i])
-                              for i in range(n_subtasks)])
-        closed = np.append(norm_vals, norm_vals[0])
-        ax.plot(angles_closed, closed, color=colors[m], lw=2, label=methods[m])
-        ax.fill(angles_closed, closed, color=colors[m], alpha=0.05)
-        ax.scatter(angles, norm_vals, color=colors[m], s=18, zorder=5)
+## XPS, Raman, XAS
 
-    # Style
-    ax.set_ylim(r_lo, r_hi)
-    ax.set_theta_zero_location('N')
-    for spine in ax.spines.values():
-        spine.set_visible(False)
-    ax.grid(False)
+Read provided domain requirements for axis direction, baseline, offsets, normalization
+and component assignment. Use main/outline gradient fills with documented alpha for
+fitted positive peaks; raw hollow points and neutral total/background. Overlap cannot
+be the sole identifier. Orange/teal/auxiliary violet only when explicitly requested. Raman families can
+occupy vertically offset blocks with a grey separator (the approved two-family example
+places primary 1 below primary 2); label offsets/temperatures and
+preserve actual amplitudes or disclose normalization. Use no chemical assignments in
+synthetic data unless explicitly presented as hypothetical.
 
-    # Outer boundary ring
-    ax.plot(angles_closed, np.full_like(angles_closed, r_hi),
-            color='k', lw=0.8, zorder=4)
+## CV and temperature-programmed XRD
 
-    # Radial spokes
-    for a in angles:
-        ax.plot([a, a], [r_lo, r_hi], color='gray', lw=0.5, zorder=4)
+CV: preserve forward/reverse acquisition order. One-family ordered shades may encode
+scan rate/cycle only with labels; keep a readable grey reference/control. Synthetic CV
+is a schematic, not evidence of a mechanism or fitted electrochemical parameters.
 
-    # Benchmark-level contour polygons
-    max_levels = max(len(v) for v in benchmark_radii.values())
-    for k in range(max_levels):
-        disp = np.array([_normalize(benchmark_radii.get(b, [0,100])[
-                            min(k, len(benchmark_radii.get(b,[0,100]))-1)], b)
-                         for b in subtask_benchmarks])
-        ax.plot(angles_closed, np.append(disp, disp[0]),
-                color='k', lw=0.6, zorder=4)
+Temperature-resolved XRD: measured intensity can be a map or offset spectra, with
+explicit temperature scale and colourbar/offset convention. Preserve raw intensity
+or state normalization; do not imply a surface-only probe or identify actual phases
+without evidence. Synthetic phase I/II peak transfer is a visual test only, not a
+material identification. Raster maps may be embedded in SVG while all text/axes stay
+editable; export matrix/coordinate data. Respect real temperature sampling/resolution.
 
-    ax.set_yticks([r_hi])
-    ax.set_yticklabels([])
-    ax.set_xticks(angles)
-    ax.set_xticklabels([])
+## Special plots
 
-    # Spoke labels (outside outer ring)
-    for angle, label in zip(angles, subtask_names):
-        r_label = r_hi + 8 + 10 * abs(np.sin(angle))
-        ax.text(angle, r_label, label, fontsize=14,
-                ha='center', va='center',
-                transform=ax.transData, clip_on=False)
-
-    ax.legend(loc='upper right', bbox_to_anchor=(1.40, 0.05),
-              fontsize=15, frameon=False)
-    return fig, ax
-```
-
-**Key settings:**
-- `ax.set_theta_zero_location('N')` — top-start convention
-- Remove all default spines/grid; draw custom spokes + contour polygons manually
-- Normalize each spoke independently using per-benchmark tick lists
-- Legend placed **outside** the plot at `bbox_to_anchor=(1.40, 0.05)`
-
----
-
-## 3D Sphere / Conceptual Illustration
-
-Used for geometric conceptual diagrams (e.g., embedding space visualization).
-
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-
-def draw_shaded_sphere(ax, light_dir=(-0.5, 0.5, 0.8),
-                       resolution=512, alpha=1.0,
-                       extent=(-1, 1, -1, 1)):
-    """Draw a 2D shaded disk that mimics a 3D sphere using ray-casting."""
-    xs = np.linspace(extent[0], extent[1], resolution)
-    ys = np.linspace(extent[2], extent[3], resolution)
-    x, y = np.meshgrid(xs, ys)
-    r2 = x**2 + y**2
-    mask = r2 <= 1.0
-
-    z = np.zeros_like(x)
-    z[mask] = np.sqrt(1.0 - r2[mask])
-
-    # Surface normals
-    nx, ny, nz = x.copy(), y.copy(), z.copy()
-    nrm = np.sqrt(nx**2 + ny**2 + nz**2) + 1e-6
-    nx, ny, nz = nx/nrm, ny/nrm, nz/nrm
-
-    # Lambertian shading
-    ld = np.array(light_dir, dtype=float)
-    ld /= np.linalg.norm(ld)
-    intensity = np.maximum(0, nx*ld[0] + ny*ld[1] + nz*ld[2])
-
-    img = np.ones_like(x)
-    img[mask] = np.clip(0.2 + 0.9 * intensity[mask], 0, 1)
-
-    ax.imshow(img, cmap='gray',
-              extent=list(extent),
-              vmin=0, vmax=1, alpha=alpha)
-    ax.set_axis_off()
-    return ax
-
-
-def plot_3d_scatter_with_arrows(ax, points, grad_vectors,
-                                point_color='#0c2458', arrow_color='#b64342'):
-    """3D scatter plot with gradient arrow annotations."""
-    from mpl_toolkits.mplot3d import proj3d
-    from matplotlib.patches import FancyArrowPatch
-
-    class Arrow3D(FancyArrowPatch):
-        def __init__(self, xs, ys, zs, *args, **kwargs):
-            super().__init__((0,0), (0,0), *args, **kwargs)
-            self._verts3d = xs, ys, zs
-        def do_3d_projection(self, renderer=None):
-            xs, ys, zs = proj3d.proj_transform(*self._verts3d, self.axes.get_proj())
-            self.set_positions((xs[0], ys[0]), (xs[1], ys[1]))
-            return np.min(zs)
-
-    ax.scatter(points[:, 0], points[:, 1], points[:, 2],
-               s=80, color=point_color, alpha=0.5)
-    for p, g in zip(points, grad_vectors):
-        arrow = Arrow3D([p[0], p[0]+g[0]], [p[1], p[1]+g[1]], [p[2], p[2]+g[2]],
-                        mutation_scale=16, lw=4, arrowstyle='->',
-                        color=arrow_color, alpha=0.8)
-        ax.add_artist(arrow)
-
-    # Clean 3D axes
-    ax.grid(False)
-    ax.xaxis.pane.set_visible(False)
-    ax.yaxis.pane.set_visible(False)
-    ax.zaxis.pane.set_visible(False)
-    ax.set_xticks([])
-    ax.set_yticks([])
-    ax.set_zticks([])
-```
-
----
-
-## Scatter Plot with Color-Coded Clusters
-
-```python
-def make_scatter(ax, x, y, labels_or_colors,
-                 size=50, alpha=0.7, edgecolors='none'):
-    """Single or multi-cluster scatter."""
-    import numpy as np
-    ax.scatter(x, y, c=labels_or_colors, s=size,
-               alpha=alpha, edgecolors=edgecolors)
-    ax.set_axis_off()   # for conceptual diagrams; remove for data plots
-```
-
----
-
-## Fill-Between Area Chart (Stacked trend)
-
-Used for cumulative publication counts, stacked contributions, etc.
-
-```python
-# Filled area (stacked) with hatch for print safety
-ax.fill_between(x, 0, y_bottom,
-                color='#ffa8a6', label='Category A')
-ax.fill_between(x, 0, y_top,
-                color='#9BC8FA',
-                hatch='///',               # hatch for grayscale print
-                edgecolor='black',
-                label='Category B')
-# Erase border artifacts
-ax.fill_between(x, 0, y_top,
-                facecolor='none',
-                edgecolor='white',
-                linewidth=2)
-
-# Overlay the trend line for exact values
-ax.plot(x, y_top, lw=3, color='#13457E')
-ax.plot(x, y_bottom, lw=3, color='#850c0a')
-```
-
----
-
-## Log-Scale Bar Chart
-
-```python
-ax.set_yscale('log')
-ymin, ymax = ax.get_ylim()
-ax.set_ylim(ymin, ymax * 20)   # expand top for annotations
-
-# Annotate values above bars
-for i, val in enumerate(values):
-    ax.text(i, val * 1.1, f'{val:.3f}',
-            ha='center', va='bottom', fontsize=16)
-```
-
----
-
-## GridSpec Multi-Panel Layout
-
-```python
-from matplotlib import gridspec
-
-# 2-row, 4-column layout
-fig = plt.figure(figsize=(36, 12))
-gs = gridspec.GridSpec(2, 4)
-
-ax_top_left  = fig.add_subplot(gs[0, 0])
-ax_top_right = fig.add_subplot(gs[0, 1:3])   # span columns 1-2
-ax_legend    = fig.add_subplot(gs[0, 3])     # legend panel
-ax_bottom    = fig.add_subplot(gs[1, :])     # full-width bottom
-```
-
----
-
-## Scientific Notation on Y-Axis
-
-```python
-ax.ticklabel_format(axis='y', style='sci', scilimits=(0, 0))
-```
-
----
-
-## Custom Spine Positioning
-
-```python
-# Move bottom spine to y=0 (for negative values)
-ax.spines['bottom'].set_position(('data', 0))
-ax.xaxis.set_ticks_position('bottom')
-ax.spines['left'].set_bounds(0, y_max)
-```
-
----
-
-## Related files
-
-- [SKILL.md](../SKILL.md) — When to use this skill
-- [api.md](api.md) — PALETTE and core helper signatures
-- [common-patterns.md](common-patterns.md) — Bar, trend, and layout patterns
-- [design-theory.md](design-theory.md) — Rationale and color theory
-- [tutorials.md](tutorials.md) — Full end-to-end walkthroughs
+Heatmaps/images may require square cells or intrinsic image aspect. Geometric equal
+scales, log axes, polar/radar coordinates and microscopy channels have semantic
+constraints; the default 1.3:1 rectangle does not override them. Numeric intensity and
+centred deviations use continuous scales, not arbitrary categorical colours. Distinct
+histograms/distributions require stated binning/normalization and real observations.

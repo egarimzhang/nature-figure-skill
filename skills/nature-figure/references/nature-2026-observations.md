@@ -1,5 +1,9 @@
 # 2026 Nature Sample Observations
 
+> Active styling comes from [layout-contract.md](layout-contract.md) and
+> [color-contract.md](color-contract.md). Historical sizes, fonts and colour choices
+> below are observations/examples, not overrides. Preserve explicitly requested panels.
+
 This note captures page-level figure patterns observed from a local 2026 sample of `Nature`
 papers, plus one `Nature Biomedical Engineering` paper used as a clinical / ML-adjacent
 cross-check.
@@ -20,7 +24,7 @@ Seen in the printable meta-assemblies paper.
 Actionable rules:
 
 - Let the schematic occupy roughly `45–60%` of figure height.
-- Use the **same physical/material palette** in the supporting plots; do not switch to generic method colors below the schematic.
+- Keep sample identities consistent between schematic and supporting plots under the unified colour contract.
 - Zoom callouts should use one repeated accent style across the figure, for example a single dashed red outline family.
 - Reserve at least one supporting panel for a real-world photograph or experimental snapshot when the story needs scale validation.
 - Supporting quantitative panels should be smaller, cleaner and less saturated than the schematic so the eye reads the page in the intended order.
@@ -37,13 +41,7 @@ Actionable rules:
 - Use white gutters and white scale bars so the plate stays legible after print/export compression.
 - Put row labels and channel labels directly on the image plate; avoid detached legends.
 
-Recommended accent set for this modality:
-
-```python
-CYAN = "#22D7E6"
-MAGENTA = "#FF2AD4"
-GREY_CONTEXT = "#B8B8B8"
-```
+Preserve explicitly supplied image-channel meanings; there is no default channel palette.
 
 ## Archetype 3: Clinical triptych
 
@@ -55,7 +53,7 @@ Actionable rules:
 - Middle row: forest-plot style effects with a dashed vertical reference line and light category bands.
 - Bottom row: compact summary bars, often binary or stacked-percentage bars.
 - Keep columns semantically parallel. If the first column is `ABR`, the next columns should reuse the same row logic rather than introducing a new layout.
-- Baseline / reference series can be black or dark grey; follow-up or intervention groups can use a restrained warm/cool sequence.
+- Baseline / reference series use readable grey; follow-up or intervention groups can use a restrained warm/cool sequence.
 
 Recommended design signal:
 
@@ -86,7 +84,7 @@ Actionable rules:
 
 ## Cross-cutting Nature rules from the sample
 
-- Panel labels are small bold lowercase letters near the top-left corner, not large badges.
+- Historical sampled panels used small bold letters; current user defaults instead use the regular 12 pt axes-anchored labels in layout-contract.md.
 - Figure pages are narrative, not dashboard-like. A dominant panel is normal.
 - Legends are often omitted if direct labeling is possible.
 - Background discipline matters more than ornament. White for charts, black only for image plates.
@@ -94,16 +92,11 @@ Actionable rules:
 - When several modalities coexist, keep axis-heavy plots visually quieter than schematics or imaging panels.
 - Gutters are slightly larger when dark panels touch light panels or when modalities change.
 
-## Palette guidance by modality
+## Colour guidance
 
-- Materials / mechanism pages:
-  `aqua`, `teal`, `lilac`, `soft violet`, with one red accent for callouts only.
-- Imaging plates:
-  `black` + `grey context` + `cyan` + `magenta`.
-- Clinical quantitative figures:
-  `black baseline`, then restrained warm/cool follow-up hues, with pale group shading.
-- Genomics / systems figures:
-  `neutral greys` plus one `red family` and one `blue family` for highlighted biological states.
+Historical examples illustrate layout, not active palette defaults. Use the unified
+[colour contract](color-contract.md) for all new plots. Explicit image-channel
+meanings are a domain exception, not a source of general category colours.
 
 ## What not to copy blindly
 

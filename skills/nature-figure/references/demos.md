@@ -1,5 +1,15 @@
 # figures4papers Demo Index
 
+> Active styling comes from [layout-contract.md](layout-contract.md) and
+> [color-contract.md](color-contract.md). Historical sizes, fonts and colour choices
+> below are observations/examples, not overrides. Preserve explicitly requested panels.
+
+> Historical assets: bundled figures4papers scripts, gallery images and chart atlases
+> are retained for layout/data-pattern reference only. Their old colours and colour
+> semantics are not current defaults. For new work use the unified colour contract
+> and canonical publication_colors helper, including when adapting these demos.
+
+
 Use this file when a user asks for a `figures4papers` look, cites the older
 `scientific-figure-making` skill, or needs a concrete Python/matplotlib example
 instead of only abstract style rules.

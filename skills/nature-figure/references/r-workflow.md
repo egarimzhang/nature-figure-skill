@@ -1,161 +1,50 @@
-# R Workflow
+# R workflow
 
-Use this when the user chooses R, brings R data/scripts, or asks to reuse the local
-R plotting templates. The R track should still follow the same figure contract:
-claim first, evidence hierarchy second, plotting code third.
+Use R exclusively once selected, including preview and QA renders; never call Python
+for an R drawing. Check R/packages early. If unavailable, report the exact blocker
+and provide R source or installation options instead of a substitute backend.
 
-## R-only execution rule
+Apply the same physical defaults in layout-contract.md and colour definitions in
+color-contract.md. Transcribe the selected numeric colours into the delivered R script;
+do not execute Python helpers for rendering. Verify Arial regular/italic with the R
+font/device stack and report missing fonts rather than silently replacing them.
 
-When the user has selected R, do all figure drawing, previewing, exporting, and
-visual QA in R. Do not call Python/matplotlib/seaborn/plotly to create a temporary
-preview, fallback export, or layout approximation. If R, `Rscript`, or required R
-packages are missing, stop before rendering and report the missing dependency. You
-may still write the R script, provide `install.packages()` commands, or ask permission
-to install dependencies, but do not cross-render the figure in another language.
+Use ggplot2/grid for basic plots, patchwork for composition, ComplexHeatmap when the
+matrix structure warrants it, svglite/cairo_pdf for editable vectors, ragg for raster.
+Only require packages needed by the actual task.
 
-Allowed non-R utilities are limited to non-visual tasks such as shell file inspection,
-CSV line counts, checksums, archive extraction, or text search. They must not create
-image/vector outputs or alter visual layout.
+Typography: axis text/title 8 pt, ordinary text/legends 7.5 pt, panel letters 12 pt.
+Axes/error strokes 0.75 pt, curves 1.125 pt. Point-line/legend markers have a 4.5 pt
+physical size and 0.6 pt edge; translate to the selected R point-size convention rather
+than assuming it matches Matplotlib. ggplot2 line widths use mm: convert using
+1 pt = 25.4/72 mm (0.75 pt is about 0.2646 mm), rather than passing point numbers as
+mm widths. Draw a complete panel border without duplicate axis strokes. Minor tick
+rendering should explicitly match the installed ggplot2 capabilities: one unnumbered
+midpoint tick, 1.5 pt length, no grid. Do not silently omit it.
 
-## Required packages by task
+Grid physical units or measured grob bounds provide fixed panel dimensions and letter
+offsets. Do not use auto-tagging that anchors to varying title bounds. Solve twin/colourbar
+occupied widths while keeping row top/bottom alignment. Start multirow frame gaps at
+12 mm including labels. A narrowed twin is not a column reference: align a colourbar's
+right border to the ordinary unshortened frame or nominal grid boundary. Labels sit
+outside; check actual artist/grob bounds. Default colourbar width/gap/tick pad are
+1.8 mm / 2 mm / 3 pt. Intrinsic image aspect is preserved. Derive bar side margins from
+outer edges, not group centres (about 4.85 mm per side in the 46 mm three-bar example).
 
-| Task | Preferred packages |
-|---|---|
-| Bars, boxplots, violins, dot plots, lines, volcano plots | `ggplot2`, `ggrepel`, `dplyr`, `tidyr` |
-| Multi-panel assembly | `patchwork`; use `cowplot` only when inset alignment requires it |
-| Rich omics heatmaps | `ComplexHeatmap`, `circlize`, `grid` |
-| Survival and clinical subgroup plots | `survival`, `survminer`, `forestplot`, `ggplot2` |
-| Circular/genome plots | `circlize`, `ggtree`, `gggenes`, domain-specific packages |
-| Export | `svglite`, `grDevices::cairo_pdf`, `ragg` |
+Use the same two core families and exact anchors, with main/mid for paired curves.
+Orange/teal/auxiliary violet require explicit instructions. Three/four-layer stacks
+use main/mid/light or outline/main/mid/light, with no error bars unless requested and
+supported. The first-family neutral-grey light is intentional.
 
-## Contract scaffold
+Ordinary bar fills are mid; stacks solid; ordinary bars have mild baseline-to-value gradients.
+Spectral fills need stronger tint/alpha and outlines. For matched replicate stacks,
+compute cumulative sums per replicate before SD/SEM. State error definitions/n.
 
-```r
-library(ggplot2)
-library(patchwork)
+Use spaced slash units and italic physical symbols with Arial glyphs. Export SVG/PDF
+at exact canvas size; retain editable text and native gradients when the selected R
+implementation supports them, otherwise disclose rasterized fills and keep adjustable
+source. PNG/TIFF can use ragg at appropriate dpi. Reopen exports using R-side tooling
+and check final-size legibility, clipping, alignment and font fidelity.
 
-palette_contract <- c(
-  neutral_dark = "#272727",
-  neutral_mid = "#767676",
-  neutral_light = "#D8D8D8",
-  signal_blue = "#3182BD",
-  signal_teal = "#33B5A5",
-  accent_red = "#D24B40",
-  accent_orange = "#E28E2C"
-)
-
-theme_nature_contract <- function(base_size = 6.5, base_family = "Arial") {
-  theme_classic(base_size = base_size, base_family = base_family) +
-    theme(
-      axis.line = element_line(linewidth = 0.35, colour = "black"),
-      axis.ticks = element_line(linewidth = 0.35, colour = "black"),
-      axis.title = element_text(size = base_size),
-      axis.text = element_text(size = base_size - 0.5),
-      legend.title = element_text(size = base_size - 0.3),
-      legend.text = element_text(size = base_size - 0.7),
-      strip.text = element_text(size = base_size - 0.3, face = "bold"),
-      plot.title = element_text(size = base_size + 0.5, face = "bold"),
-      panel.grid = element_blank()
-    )
-}
-
-theme_set(theme_nature_contract())
-
-save_pub_r <- function(plot, filename, width_mm = 183, height_mm = 120, dpi = 600) {
-  w <- width_mm / 25.4
-  h <- height_mm / 25.4
-
-  svglite::svglite(paste0(filename, ".svg"), width = w, height = h)
-  print(plot)
-  dev.off()
-
-  grDevices::cairo_pdf(paste0(filename, ".pdf"), width = w, height = h, family = "Arial")
-  print(plot)
-  dev.off()
-
-  ragg::agg_tiff(paste0(filename, ".tiff"), width = w, height = h, units = "in", res = dpi)
-  print(plot)
-  dev.off()
-}
-```
-
-## Panel labels in R
-
-Use patchwork tags for most multi-panel figures:
-
-```r
-fig <- (p_a | p_b) / (p_c | p_d) +
-  plot_annotation(tag_levels = "a") &
-  theme(plot.tag = element_text(size = 8, face = "bold"))
-```
-
-Use manual labels only when dark image plates or inset geometry make patchwork tags
-misalign.
-
-## Patchwork layout patterns
-
-### Quantitative grid
-
-```r
-fig <- (p_a | p_b | guide_area()) /
-       (p_c | p_d | p_e) +
-  plot_layout(guides = "collect", widths = c(1, 1, 0.45)) &
-  theme(legend.position = "right")
-```
-
-### Schematic-led composite
-
-```r
-design <- "
-AAAA
-BBCD
-"
-fig <- p_schematic + p_b + p_c + p_d +
-  plot_layout(design = design, heights = c(1.8, 1))
-```
-
-### Image plate plus quant
-
-Keep black backgrounds inside image panels only. Put scale bars on the image, then
-place quantification next to or below the representative image.
-
-```r
-p_img <- ggplot(img_df, aes(x, y, fill = intensity)) +
-  geom_raster() +
-  scale_fill_gradient(low = "black", high = "white") +
-  coord_fixed(expand = FALSE) +
-  annotate("segment", x = 10, xend = 40, y = 10, yend = 10,
-           linewidth = 0.6, colour = "white") +
-  theme_void() +
-  theme(legend.position = "none", plot.background = element_rect(fill = "black", colour = NA))
-```
-
-## ComplexHeatmap export
-
-`ComplexHeatmap` objects are grid objects, not ggplot objects. Export them by opening
-the graphics device, drawing, then closing it.
-
-```r
-library(ComplexHeatmap)
-library(circlize)
-
-pdf("heatmap.pdf", width = 7.2, height = 4.8, family = "Arial")
-draw(ht, heatmap_legend_side = "right", annotation_legend_side = "right")
-dev.off()
-
-svglite::svglite("heatmap.svg", width = 7.2, height = 4.8)
-draw(ht, heatmap_legend_side = "right", annotation_legend_side = "right")
-dev.off()
-```
-
-## Template reuse rule
-
-The local R materials are examples, not final style. When reusing them:
-
-1. Inspect only the nearest template folder.
-2. Keep useful data wrangling, statistics, and geoms.
-3. Replace ad hoc colors, oversized fonts, dense legends, and PNG-only export.
-4. Rebuild the final script around `theme_nature_contract()` and `save_pub_r()`.
-5. Add source-data output if the figure is manuscript-facing.
-
-Open `references/r-template-index.md` for the local template atlas.
+The Python helpers/preview are executed tests for Python only; do not claim they validate
+R rendering. R-specific rendering must be tested when an R figure is actually requested.

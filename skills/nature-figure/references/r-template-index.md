@@ -55,7 +55,7 @@ When adapting a private template:
 
 - Keep useful data wrangling, statistics, and geoms.
 - Replace template-specific colors with the figure-level semantic palette.
-- Normalize fonts to final-size 5-7 pt text and 8 pt bold lowercase panel labels.
+- Normalize to layout-contract.md: Arial 8 pt axis text, 7.5 pt ordinary text and 12 pt regular panel letters, anchored to the left/top frame.
 - Convert single-output PNG/PDF scripts to SVG/PDF/TIFF export.
 - Remove decorative elements that do not support the core conclusion.
 - Ensure each statistical comparison has `n`, center, spread, test, and correction

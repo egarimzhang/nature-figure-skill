@@ -1,5 +1,9 @@
 # Figure Contract
 
+> Active styling comes from [layout-contract.md](layout-contract.md) and
+> [color-contract.md](color-contract.md). Historical sizes, fonts and colour choices
+> below are observations/examples, not overrides. Preserve explicitly requested panels.
+
 Use this reference before writing plotting code. The goal is to make the figure
 serve the paper's scientific logic.
 
@@ -40,13 +44,11 @@ minimum set of panels that make the conclusion clear and defensible.
 
 - The core conclusion should be one sentence with a verb: "Treatment X reduces
   Y by restoring Z", not "Treatment results".
-- Every panel must answer a unique question. If covering a panel would not weaken
-  the argument, remove or merge it.
+- For manuscript design, each panel should carry a useful question. Preserve user-specified panels; do not remove requested style-test panels merely because they share a pattern.
 - Separate primary evidence from supporting evidence. The primary evidence gets
   the hero panel or the clearest axis; controls and robustness panels should be
   visually quieter.
-- If the user provides data but no claim, infer a provisional claim from the data
-  request and ask for confirmation before final styling.
+- If data are supplied without a claim, use the stated comparison goal without inventing a scientific conclusion. Styling previews need a visual test contract rather than a mechanistic claim.
 
 ## Archetype selection
 
@@ -73,7 +75,7 @@ through the whole figure and, where possible, through the manuscript.
 
 ## Aesthetic integration
 
-- Use one neutral family, one signal family, and one accent family.
+- Use the core families for equal categories without imposing a neutral/signal/accent hierarchy; follow color-contract.md.
 - Keep the same condition/method color across all panels.
 - Prefer direct labels for stable line identities, channels, and fixed spatial regions.
 - Use a shared legend area when repeated legends would waste space.
