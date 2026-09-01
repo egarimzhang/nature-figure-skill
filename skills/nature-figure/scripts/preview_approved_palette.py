@@ -1,4 +1,4 @@
-"""Approved synthetic abc palette test; orange explicitly enabled only in XPS.
+"""Approved synthetic abc palette test; yellow explicitly enabled only in XPS.
 Run: python scripts/preview_approved_palette.py OUTPUT_DIRECTORY
 Three bars each have four layers, value labels and no error bars; no scientific claims.
 """
@@ -14,7 +14,7 @@ from publication_style import *
 PREVIEW = {
     'canvas_width_mm': 180., 'left_mm': 12., 'column_pitch_mm': 60.,
     'bottom_mm': 12.5, 'top_mm': 7., 'plot_width_mm': 46., 'aspect': 1.3,
-    'xps_baseline': .028, 'xps_families': ['blue', 'orange', 'red'],
+    'xps_baseline': .028, 'xps_families': ['primary1', 'primary3', 'primary2'],
     'paired_roles': ['main', 'mid'],
     'stack_roles_bottom_to_top': ['outline', 'main', 'mid', 'light'],
     'bar_width_data': 105., 'c_error_bars': False,
@@ -82,7 +82,7 @@ def main(out):
     stack = read_csv(data/'c_values.csv'); temperatures = stack['temperature_K']
     values = np.column_stack([stack[n] for n in ('I','II','III','IV')])
     base = np.zeros(len(temperatures))
-    colors = [FAMILIES['blue'][role] for role in PREVIEW['stack_roles_bottom_to_top']]
+    colors = [FAMILIES['primary1'][role] for role in PREVIEW['stack_roles_bottom_to_top']]
     for j, (color, label) in enumerate(zip(colors, ['I','II','III','IV'])):
         c.bar(temperatures, values[:,j], bottom=base, width=PREVIEW['bar_width_data'],
               color=color, edgecolor='none', label=label, zorder=2)
@@ -134,7 +134,7 @@ def main(out):
     ca = card.add_axes([0,0,1,1]); ca.set(xlim=(0,180),ylim=(0,48)); ca.axis('off')
     roles = ['light','mid','main','outline']; xs = [43,80,117,154]
     for role,x in zip(roles,xs): ca.text(x,43,role,ha='center',va='center',fontsize=9)
-    for family,y,label in [('blue',28,'Primary 1'),('red',9,'Primary 2')]:
+    for family,y,label in [('primary1',28,'Primary 1'),('primary2',9,'Primary 2')]:
         ca.text(5,y+4,label,ha='left',va='center',fontsize=10)
         for role,x in zip(roles,xs):
             color = FAMILIES[family][role]
@@ -145,13 +145,13 @@ def main(out):
     plt.close(card)
     params = {**PREVIEW, 'canvas_mm':[fw,fh], 'panel_rectangles_mm':geometries,
               'families':FAMILIES, 'style':STYLE, 'core_order':list(CORE_ORDER),
-              'family_names':{'blue':'Primary 1','red':'Primary 2','orange':'Explicit auxiliary'},
+              'family_names':{'primary1':'Primary 1','primary2':'Primary 2','primary3':'Primary 3'},
               'xps_fill_alpha':[FILL_ALPHA_BASE,FILL_ALPHA_TIP],
               'synthetic':True,
               'peak_labels':'P1/P2/P3 are placeholders, not chemical assignments.'}
     (out/'parameters.json').write_text(json.dumps(params,indent=2)+'\n')
     checks = ['Both primary palettes exactly match the eight user-supplied HEX values.',
-              'Orange occurs only in panel a; no teal or auxiliary violet is used.',
+              'Yellow occurs only in panel a; no other auxiliary is used.',
               'Three XPS components plus baseline reproduce the unchanged total.',
               'Panel b contains four main/mid curves with 4.5 pt markers.',
               'Panel c has three bars, four layers each, 12 values and zero error bars.',

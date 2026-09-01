@@ -68,7 +68,7 @@ def preview(out, source_dir=None):
         ax=fig.add_axes([left/fw,row_bottoms[row]/fh,pw/fw,ph/fh])
         style_axis(ax);axes.append(ax);panel_letters.append(add_panel_label(ax,chr(97+idx)))
     a,b,c,d,e,f,g,h,i=axes
-    blue,red=FAMILIES['blue'],FAMILIES['red']
+    blue,red=FAMILIES['primary1'],FAMILIES['primary2']
 
     # a: two GC traces, same retention scale, no horizontal separator.
     rt=np.linspace(0,10,2001)
@@ -113,7 +113,7 @@ def preview(out, source_dir=None):
 
     # c: preserve approved stack replicates/means/errors, three values per bar.
     stack=np.load(data_dir/'c_stacked_replicates.npz')
-    cool_levels=stack_levels('blue')
+    cool_levels=stack_levels('primary1')
     means,cumulative,sd=stacked_bars(c,stack['temperature_K'],stack['replicates'],cool_levels,
                 error_kind='sd',error_scope='cumulative',width=PREVIEW['bar_width_data'],labels=['I','II','III'],annotate=True)
     percentage_axes(c,'Fraction / %')
@@ -121,10 +121,10 @@ def preview(out, source_dir=None):
     legends.append(c.legend(loc='upper left',ncol=3,frameon=False,fontsize=STYLE['text_font'],
                         handlelength=1.1,handletextpad=.35,columnspacing=.7,borderpad=.2))
 
-    # d: approved preview explicitly enables orange beside the two primary families.
-    # This is a fixed QA recipe, not permission to add orange to future figures.
+    # d: approved preview explicitly enables Primary 3 yellow beside the two primary families.
+    # This is a fixed QA recipe, not permission to add yellow to future figures.
     energy=np.linspace(281.8,293.2,1001);baseline=.028
-    specs=[('blue',288.6,.58,.61),('orange',286.7,.51,.42),('red',284.7,.64,.98)]
+    specs=[('primary1',288.6,.58,.61),('primary3',286.7,.51,.42),('primary2',284.7,.64,.98)]
     components=[]
     for k,(family,center,sigma,height) in enumerate(specs):
         signal=height*np.exp(-.5*((energy-center)/sigma)**2);components.append(signal)
@@ -139,12 +139,12 @@ def preview(out, source_dir=None):
           xlabel='Binding energy / eV',ylabel='Intensity / a.u.')
     d.text(.03,.97,'XPS',transform=d.transAxes,va='top')
     np.savetxt(data_dir/'d_xps.csv',np.column_stack([energy,raw,fit,*components]),delimiter=',',
-              header='binding_energy_eV,synthetic_observation,total,blue,orange,red',comments='')
+              header='binding_energy_eV,synthetic_observation,total,primary1,primary3,primary2',comments='')
 
     # e: monochrome selectivity bars and monochrome conversion point-line on independent y axes.
     temperatures=np.array([300,500,700]);selectivity=np.array([54,70,82]);conversion=np.array([28,55,88])
     for t,value in zip(temperatures,selectivity):
-        gradient_bar(e,t,value,'blue',width=PREVIEW['bar_width_data'])
+        gradient_bar(e,t,value,'primary1',width=PREVIEW['bar_width_data'])
     percentage_axes(e,'Selectivity / %')
     right=make_twin_axis(e);right.set(ylim=(0,100),yticks=[0,25,50,75,100],ylabel='Conversion / %')
     right.plot(temperatures,conversion,color=red['main'],lw=STYLE['curve_width'],marker='o',ms=STYLE['marker_size'],mew=STYLE['marker_edge'])
@@ -156,7 +156,7 @@ def preview(out, source_dir=None):
               header='temperature_K,selectivity_percent,conversion_percent',comments='')
 
     # f: six segment values per bar; total visual progression dark -> light -> dark.
-    warm_levels=stack_levels('red',reverse=True)
+    warm_levels=stack_levels('primary2',reverse=True)
     six_colors=cool_levels+warm_levels
     six_values=np.array([[13,12,13,12,13,12],[14,13,14,14,13,14],[15,16,15,16,15,16]],dtype=float)
     bottom_values=np.zeros(3)
@@ -196,7 +196,7 @@ def preview(out, source_dir=None):
     xrd_width=h.get_position().width*fw
     xrd=np.load(data_dir/'h_temperature_xrd.npz')
     im=h.imshow(xrd['globally_normalized_intensity'],extent=(20,60,350,750),origin='lower',
-                aspect='auto',interpolation='nearest',cmap=sequential_cmap('blue'),vmin=0,vmax=1,zorder=1)
+                aspect='auto',interpolation='nearest',cmap=sequential_cmap('primary1'),vmin=0,vmax=1,zorder=1)
     h.set(xlim=(20,60),ylim=(350,750),xticks=[20,30,40,50,60],yticks=[350,450,550,650,750],
           xlabel=r'$2\theta$ / °',ylabel=r'$T$ / K')
     h.text(.035,.97,'I → II',transform=h.transAxes,va='top')
@@ -211,7 +211,7 @@ def preview(out, source_dir=None):
 
     # i: previous offset Raman data, lower blue/upper coral, grey separator.
     raman=read_csv(data_dir/'i_raman.csv');shift=raman['raman_shift_cm1']
-    for family,base in [('blue',.12),('red',2.42)]:
+    for family,base in [('primary1',.12),('primary2',2.42)]:
         fam=FAMILIES[family];shades=[fam['mid'],blend(fam['mid'],fam['main'],.5),fam['main']]
         for k,(temp,color) in enumerate(zip([300,400,500],shades)):
             yy=raman[f'{family}_{temp}K_display_offset']
@@ -275,7 +275,7 @@ def preview(out, source_dir=None):
     fig.savefig(stem.with_suffix('.png'),dpi=300,bbox_inches=None)
     fig.savefig(stem.with_suffix('.tiff'),dpi=600,bbox_inches=None,pil_kwargs={'compression':'tiff_lzw'})
     ns={'s':'http://www.w3.org/2000/svg'};svg=ET.parse(stem.with_suffix('.svg')).getroot()
-    assert len(svg.findall('.//s:linearGradient',ns))==6  # three XPS peaks + three selection bars
+    assert len(svg.findall('.//s:linearGradient',ns))==3  # XPS peak exception only; ordinary bars are solid
     assert len(svg.findall('.//s:image',ns))==1
     styles={el.get('style','') for el in svg.iter() if 'font-family' in el.get('style','')}
     assert styles and all("'Arial'" in s for s in styles)
@@ -286,7 +286,7 @@ def preview(out, source_dir=None):
             'c retains its source stack means and cumulative SD; nine value labels.',
             'f has exactly 18 value labels and six specified blue/coral segment colours.',
             'h colourbar right border equals b ordinary frame; the narrowed e frame is not a reference.',
-            'SVG uses editable Arial text and six native gradients; only XRD intensity is raster.']
+            'SVG uses editable Arial text and three native peak gradients; only XRD intensity is raster.']
     (out/'validation.json').write_text(json.dumps({'passed':True,'checks':checks},indent=2)+'\n')
     print(json.dumps({'canvas_mm':[fw,fh],'twin_width_mm':twin_width,'h_width_mm':xrd_width,
                       'colourbar_right_mm':column_right_mm,'panels':9}))

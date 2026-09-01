@@ -43,14 +43,17 @@ Only a specified submission target warrants checking its current official requir
   alignment and visual balance. Establish a standard unshortened column boundary first;
   a narrowed twin frame never becomes the reference for further panels. Colourbar right
   borders align to the standard boundary, with tick text outside. Labels move with their axes.
-- Two core families: primary 1 blue-violet and primary 2 coral, identifying equal
-  categories without an imposed hero. Use the exact light/mid/main/outline anchors in
-  color-contract.md; the first family's neutral-grey light is intentional.
-  Main for curves, main/mid for paired measurements, mid for ordinary bars, outline for
-  spectral edges. Three-layer stacks use main/mid/light; four-layer stacks add outline
-  below main. Orange, teal and auxiliary violet all require explicit user instruction.
-  Avoid red+teal unless the user explicitly requests that combination (e.g. five-colour QA).
-- Use mid-based mild bar gradients, solid stacks, stronger translucent peak gradients,
+- Choose one registered scheme: primary 1/2 (default), primary 1/3 yellow, or primary
+  1/4 orange. Primary 3 and 4 are mutually exclusive. Use exact light/mid/main/outline
+  anchors and the scheme-specific on-request order in color-contract.md. Main is the
+  curve default; paired measurements use main/mid. Non-peak closed shapes use light
+  faces and outline boundaries. Ordinary bars use solid light faces/outline borders;
+  fitted peak-shaped spectra retain stronger translucent gradients. Three-layer stacks
+  use main/mid/light; four-layer stacks add outline below main. Cyan/blue/violet remain
+  one-anchor auxiliaries. Never add a colour solely because more data rows exist.
+- Raw-data bars use 3.0 pt light-face/main-edge points distributed deterministically
+  through the central 40% of bar width. Their neutral dark error bars are topmost.
+  Point-line error bars use family outline where overlap needs series identity. Keep
   readable grey references and explicit uncertainty semantics.
 
 Python implementations are [publication_colors.py](scripts/publication_colors.py) and

@@ -22,15 +22,17 @@ a statement of universal journal compliance; verify a specified submission's off
   Colourbar RIGHT BORDER matches that standard boundary, labels outside. Check individual
   artist boxes in shared gutters: union boxes may overlap only in genuinely empty areas.
   Actual labels/marks must not collide or escape canvas. Check near adjacent panel letters.
-- Exact approved anchors, main curves, main/mid paired curves, mid ordinary bars,
+- Exact approved anchors, main curves, main/mid paired curves, light/outline ordinary bars,
   outline peaks. Three/four stacks use literal main/mid/light or outline/main/mid/light.
-  Two equal core categories; no silent orange/teal/auxiliary violet extension or red+teal
-  without explicit instruction. First-family grey light is intentional, not a reference.
+  Two equal active primary categories; no silent on-request extension. When authorized, prefer
+  the active scheme's on-request order; keep Primary 3/4 mutually exclusive. Primary keys are primary1/primary2/primary3/primary4, not auxiliary blue. Do not auto-create auxiliary four-level ladders.
   Check requested layer counts and do not add errors to a no-error stack.
-- Gradients subtle in bars and readable/translucent in spectra. Native SVG gradient stops;
+- Ordinary bars use solid light/outline styling; peak gradients remain readable/translucent. Native SVG gradient stops;
   intentional raster intensity maps disclosed, with editable labels and matrix data.
 - Plot limits include all observations/errors and meaningful zero baselines; bounded
   percentages do not silently clip overflow. Breaks/normalization/offsets are explicit.
+- Raw-data bars use true y values, deterministic central-40% x positions, 3.0 pt light-face/main-edge points and topmost neutral errors. Point-line errors use family outline.
+- Non-peak closed shapes use light faces/outline boundaries; peak-shaped spectral components retain gradients.
 - Errors have correct definition/n and asymmetric form when provided. Stacked errors are
   derived from cumulative replicate sums or justified covariance, not summed SDs. Check
   an anti-correlated replicate example to expose incorrect propagation.

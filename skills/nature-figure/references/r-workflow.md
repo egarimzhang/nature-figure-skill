@@ -31,12 +31,14 @@ outside; check actual artist/grob bounds. Default colourbar width/gap/tick pad a
 1.8 mm / 2 mm / 3 pt. Intrinsic image aspect is preserved. Derive bar side margins from
 outer edges, not group centres (about 4.85 mm per side in the 46 mm three-bar example).
 
-Use the same two core families and exact anchors, with main/mid for paired curves.
-Orange/teal/auxiliary violet require explicit instructions. Three/four-layer stacks
-use main/mid/light or outline/main/mid/light, with no error bars unless requested and
-supported. The first-family neutral-grey light is intentional.
+Use the same registered pair and exact anchors, with main/mid for paired curves.
+Choose Primary 1/2, Primary 1/3 yellow or Primary 1/4 orange; Primary 3/4 never coexist.
+Scheme-specific extensions require explicit instructions. Cyan/blue/violet retain single
+anchors; derive their outlines/tints only for the current use. Three/four-
+layer primary stacks use main/mid/light or outline/main/mid/light, with errors only
+when requested and supported. Use distinct primary1/primary2/primary3/primary4 keys, not auxiliary blue.
 
-Ordinary bar fills are mid; stacks solid; ordinary bars have mild baseline-to-value gradients.
+Ordinary bars use solid light faces with outline borders; stacks remain solid component levels.
 Spectral fills need stronger tint/alpha and outlines. For matched replicate stacks,
 compute cumulative sums per replicate before SD/SEM. State error definitions/n.
 

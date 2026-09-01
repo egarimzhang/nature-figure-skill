@@ -1,4 +1,4 @@
-"""Compatibility entry point: render the five-colour supplemental preview."""
+"""Compatibility entry point: render the six-colour abcd preview."""
 import sys
 from preview_palette import preview
 if __name__ == '__main__':

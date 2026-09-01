@@ -46,21 +46,29 @@ fig.savefig('figure.pdf',bbox_inches=None)
 
 ## Colours and gradients
 
-- `FAMILIES`: exact main, outline, mid, light anchors plus bar_tip/base and fill_tip/base.
-  Historical keys blue/red mean primary 1/2. `line` aliases outline; `pair_light` aliases
+- `PRIMARY`, `FAMILIES`: four exact light/mid/main/outline primary families plus derived
+  bar/fill helpers. Primary 3 yellow and Primary 4 orange are mutually exclusive.
+  Migrate old source keys explicitly; do not silently reinterpret old data identities. `line` aliases outline; `pair_light` aliases
   mid for compatibility only. New curves use main, paired measurements main/mid.
-- `category_colors(count, role='main', families=None)`: explicit count validation;
-  more than two core categories raises. Supply orange/teal/violet only after user instruction.
-- `stack_levels(family='blue', count=3, reverse=False)`: three literal main/mid/light
+- `SCHEMES`, `SCHEME_ON_REQUEST`, `resolve_scheme(scheme)`: registered primary 1/2,
+  1/3 and 1/4 pairs and their non-cycling extension order.
+- `category_colors(count, role='main', families=None, allow_auxiliary=False, scheme=...)`:
+  defaults to the active pair and rejects overflow. Authorized extension follows the
+  scheme-specific order; explicit family identity/order wins.
+- `stack_levels(family='primary1', count=3, reverse=False)`: three literal main/mid/light
   swatches, or count=4 for outline/main/mid/light. Other counts raise; design an explicit
-  mapping. Reverse the second three-layer block for requested six-component two-family stacks.
+  mapping. Auxiliaries reject fixed stack ladders; derive them only when requested. Reverse the second three-layer block for requested six-component two-family stacks.
 - `blend(color, target='#FFFFFF', amount=...)`: RGB styling tint, not a data scale.
-- `gradient_bar(ax, position, value, family='blue', baseline=0, width=0.60,
-  horizontal=False, gradient=True, tip_color=None, base_color=None, alpha=1)`: value is
-  the signed displacement from baseline. Keep limits inclusive; linear axes only.
-- `gradient_peak(ax,x,y,family='blue',baseline=0,alpha_base=.40,alpha_tip=.82)`:
+- `closed_shape_style(family='primary1',alpha=.65)`: light face/outline boundary for
+  non-peak closed areas.
+- `gradient_bar(..., gradient=False, ...)`: ordinary default is a solid light face with
+  outline; gradient is explicit opt-in.
+- `raw_point_offsets(count,width,central_fraction=.40)`: deterministic central placement.
+- `raw_data_bar(ax,position,values,family,width,error_kind=None,label=None)`: mean bar,
+  light-face/main-edge 3 pt raw points and optional explicit SD/SEM neutral top error.
+- `gradient_peak(ax,x,y,family='primary1',baseline=0,alpha_base=.40,alpha_tip=.82)`:
   monotonic x, finite positive curve above constant baseline. Draw an outline separately.
-- `sequential_cmap(family='blue')`, `diverging_cmap()`: numeric, not categorical scales.
+- `sequential_cmap(family='primary1')`, `diverging_cmap(scheme=...)`: numeric scales.
 - `save_editable_svg(fig, filename)`: after final layout, replace clipped gradient strips
   by editable native SVG gradients. Fixed canvas required; ordinary savefig handles PDF/raster.
 

@@ -19,54 +19,102 @@ def blend(color, target='#FFFFFF', amount=0.2):
     return mpl.colors.to_hex((1 - amount) * a + amount * b).upper()
 
 
-# Exact approved anchors. Historical blue/red keys mean primary 1/2; primary 1
-# is now blue-violet, distinct from the explicitly enabled auxiliary violet.
-# Colour roles are styling choices, not scientific values or category importance.
-FAMILIES = {
-    'blue': {'light': '#DBDBDB', 'mid': '#C5C5E0', 'main': '#666EB0', 'outline': '#3F3770'},
-    'red': {'light': '#DBD1B8', 'mid': '#E0A988', 'main': '#E0725E', 'outline': '#B35B4B'},
-    'orange': {'main': '#F3962F', 'light': '#FACC8F'},  # explicit user request only
-    'teal': {'main': '#42949E'},                       # explicit user request only
-    'violet': {'main': '#9A4D8E'},                     # explicit user request only
+# Exact four-level primary anchors. Primary 3/4 are mutually exclusive warm
+# alternatives in ordinary use; do not place them in the same figure.
+PRIMARY = {
+    'primary1': {'light':'#D9DBEF','mid':'#9FA5D6','main':'#666EB0','outline':'#4D5384'},
+    'primary2': {'light':'#F9E3E0','mid':'#F0BAB0','main':'#E0725E','outline':'#B35B4B'},
+    'primary3': {'light':'#FCE3C8','mid':'#F7CE9A','main':'#F7BC71','outline':'#E39C40'},
+    'primary4': {'light':'#FFD2AA','mid':'#FFA450','main':'#DE6D04','outline':'#BF5E04'},
 }
-for name, family in FAMILIES.items():
-    main = family['main']
-    family.setdefault('mid', blend(main, amount=0.22))
-    family.setdefault('light', blend(main, amount=0.58))
-    family.setdefault('outline', blend(main, '#000000', 0.22 if name=='orange' else 0.15))
-    family['line'] = family['outline']  # Deprecated compatibility alias; never a curve default.
-    family['pair_light'] = family['mid']  # Deprecated alias; new paired curves use main/mid.
-    family['bar_tip'] = family['mid']
-    family['bar_base'] = blend(family['mid'], amount=0.18)
-    family['fill_tip'] = main
-    family['fill_base'] = blend(main, amount=0.38)
+AUXILIARY_ANCHORS = {'cyan':'#A0DBCC','blue':'#9AC9DB','violet':'#D7BDDB'}
+SCHEMES = {
+    'primary1/primary2': ('primary1','primary2'),
+    'primary1/primary3': ('primary1','primary3'),
+    'primary1/primary4': ('primary1','primary4'),
+}
+SCHEME_ON_REQUEST = {
+    # Primary 3 and 4 are alternatives and never enter one automatic sequence together.
+    'primary1/primary2': ('primary3','cyan','blue','violet'),
+    'primary1/primary3': ('primary2','cyan','blue','violet'),
+    'primary1/primary4': ('cyan','blue','violet'),
+}
+DEFAULT_SCHEME = 'primary1/primary2'
+CORE_ORDER = SCHEMES[DEFAULT_SCHEME]  # compatibility: active families of the default scheme
+AUXILIARY_ORDER = SCHEME_ON_REQUEST[DEFAULT_SCHEME]  # compatibility: default on-request order
+FAMILIES = {name:dict(values) for name,values in PRIMARY.items()}
+for name,anchor in AUXILIARY_ANCHORS.items():
+    # main/mid are helper aliases of the same anchor, not distinct prescribed swatches.
+    FAMILIES[name] = {'anchor':anchor,'main':anchor,'mid':anchor,
+                      'outline':blend(anchor,'#000000',.22)}
+for name,family in FAMILIES.items():
+    family['fill_tip']=family['main']
+    family['fill_base']=blend(family['main'],amount=.38)
+    family['bar_tip']=family.get('light',family['mid'])
+    family['bar_base']=blend(family['bar_tip'],amount=.08)
+    family['line']=family['outline']  # Deprecated compatibility role, never curve default.
+    family['pair_light']=family['mid']  # Deprecated role; new primary pairs read mid.
 
 NEUTRALS = {'black': '#000000', 'dark': '#4D4D4D', 'mid': '#767676',
             'light': '#CFCECE', 'pale': '#F2F2F2', 'white': '#FFFFFF'}
-CORE_ORDER = ('blue', 'red')
-AUXILIARY_ORDER = ('orange', 'teal', 'violet')
 BAR_ALPHA = 1.0
 FILL_ALPHA_BASE, FILL_ALPHA_TIP = 0.40, 0.82
+CLOSED_FILL_ROLE = 'light'
 
 
-def category_colors(count, role='main', families=None):
-    """Explicit overflow instead of silently cycling colours or dropping data.
+def resolve_scheme(scheme=DEFAULT_SCHEME):
+    """Return two active primary names from a registered name or exact pair."""
+    if scheme is None:
+        scheme = DEFAULT_SCHEME
+    if isinstance(scheme, str):
+        try:
+            return SCHEMES[scheme]
+        except KeyError as exc:
+            raise ValueError(f'Unknown primary scheme: {scheme!r}') from exc
+    pair=tuple(scheme)
+    if pair not in SCHEMES.values():
+        raise ValueError(f'Unregistered primary pair: {pair!r}')
+    return pair
 
-    Supply families only after deciding their semantics; orange/teal/violet require an
-    explicit user request. A red+teal combination needs separate justification.
+
+def scheme_name(scheme=DEFAULT_SCHEME):
+    pair=resolve_scheme(scheme)
+    return next(name for name,value in SCHEMES.items() if value==pair)
+
+
+def closed_shape_style(family='primary1', alpha=0.65):
+    """Default non-peak closed geometry: light face with outline boundary."""
+    if family not in PRIMARY:
+        raise ValueError('Closed-shape defaults require a four-level primary family.')
+    return {'facecolor':FAMILIES[family][CLOSED_FILL_ROLE],
+            'edgecolor':FAMILIES[family]['outline'],'alpha':alpha}
+
+
+def category_colors(count, role='main', families=None, *, allow_auxiliary=False,
+                    scheme=DEFAULT_SCHEME):
+    """Default: active two-primary scheme. Opt-in extension follows its priority.
+
+    Set allow_auxiliary only for an explicit auxiliary/multi-colour request, not
+    because a dataset has more rows. Explicit families retain requested identities/order.
     """
-    names = list(CORE_ORDER if families is None else families)
+    active=resolve_scheme(scheme)
+    order=SCHEME_ON_REQUEST[scheme_name(scheme)]
+    names=list(families) if families is not None else list(active)+(list(order) if allow_auxiliary else [])
+    if 'primary3' in names and 'primary4' in names:
+        raise ValueError('Primary 3 yellow and Primary 4 orange are mutually exclusive.')
     if count < 0 or count > len(names):
-        raise ValueError('More categories than assigned colours: choose markers, panels, or ask the user.')
+        raise ValueError('More categories than assigned colours: use markers/panels or request auxiliary colours.')
     return [FAMILIES[name][role] for name in names[:count]]
 
 
-def stack_levels(family='blue', *, count=3, reverse=False):
+def stack_levels(family='primary1', *, count=3, reverse=False):
     """Literal solid swatches: three main/mid/light or four outline/main/mid/light.
 
     Reverse the second three-layer family for an explicit six-component stack.
     This never reorders data or supplies unrequested auxiliary families.
     """
+    if family not in PRIMARY:
+        raise ValueError('Auxiliaries have one anchor; explicitly design any extra stack levels.')
     if count not in (3, 4):
         raise ValueError('Use 3 or 4 levels, or explicitly design another stack mapping.')
     roles = ('main', 'mid', 'light') if count==3 else ('outline', 'main', 'mid', 'light')
@@ -77,7 +125,7 @@ def stack_levels(family='blue', *, count=3, reverse=False):
 def apply_color_style():
     """Colour-only style; leaves font sizes, dimensions and line widths alone."""
     mpl.rcParams.update({
-        'axes.prop_cycle': mpl.cycler(color=category_colors(len(CORE_ORDER), 'main')),
+        'axes.prop_cycle': mpl.cycler(color=category_colors(2, 'main', scheme=DEFAULT_SCHEME)),
         'axes.edgecolor': NEUTRALS['dark'], 'axes.labelcolor': NEUTRALS['dark'],
         'xtick.color': NEUTRALS['dark'], 'ytick.color': NEUTRALS['dark'], 'text.color': NEUTRALS['dark'],
         'grid.color': NEUTRALS['light'], 'axes.facecolor': '#FFFFFF',
@@ -87,15 +135,22 @@ def apply_color_style():
     # identities for every multi-series figure rather than relying on cycling.
 
 
-def sequential_cmap(family='blue'):
-    f = FAMILIES[family]
-    return mpl.colors.LinearSegmentedColormap.from_list(
-        family + '_sequential', [blend(f['main'], amount=0.94), f['light'], f['mid'], f['main'], f['outline']])
+def sequential_cmap(family='primary1'):
+    f=FAMILIES[family]
+    if family in PRIMARY:
+        colors=[blend(f['main'],amount=.94),f['light'],f['mid'],f['main'],f['outline']]
+    else:
+        # A temporary numeric ramp, not a fixed categorical auxiliary ladder.
+        colors=[blend(f['anchor'],amount=.94),f['anchor'],f['outline']]
+    return mpl.colors.LinearSegmentedColormap.from_list(family+'_sequential',colors)
 
 
-def diverging_cmap():
-    return mpl.colors.LinearSegmentedColormap.from_list(
-        'blue_neutral_coral', [FAMILIES['blue']['outline'], NEUTRALS['pale'], FAMILIES['red']['outline']])
+def diverging_cmap(scheme=DEFAULT_SCHEME):
+    """Signed quantities only: zero neutral, ends use the active primary pair."""
+    negative,positive=resolve_scheme(scheme)
+    return mpl.colors.LinearSegmentedColormap.from_list('primary_signed',
+        [FAMILIES[negative]['outline'],FAMILIES[negative]['main'],FAMILIES[negative]['light'],
+         '#FAFAFA',FAMILIES[positive]['light'],FAMILIES[positive]['main'],FAMILIES[positive]['outline']])
 
 
 def _gradient(ax, patch, start, end, base_color, tip_color, base_alpha, tip_alpha, steps=96):
@@ -138,8 +193,8 @@ def _gradient(ax, patch, start, end, base_color, tip_color, base_alpha, tip_alph
     return patch
 
 
-def gradient_bar(ax, position, value, family='blue', baseline=0, width=0.60,
-                 horizontal=False, gradient=True, tip_color=None, base_color=None, alpha=BAR_ALPHA):
+def gradient_bar(ax, position, value, family='primary1', baseline=0, width=0.60,
+                 horizontal=False, gradient=False, tip_color=None, base_color=None, alpha=BAR_ALPHA):
     f = FAMILIES[family]
     tip, base = tip_color or f['bar_tip'], base_color or f['bar_base']
     endpoint = baseline + value
@@ -151,14 +206,56 @@ def gradient_bar(ax, position, value, family='blue', baseline=0, width=0.60,
         start, end = (position, baseline), (position, endpoint)
     if not gradient or value == 0:
         patch.set_facecolor(tip)
-        patch.set_edgecolor('none')
+        patch.set_edgecolor(f['outline'])
+        patch.set_linewidth(.75)
         patch.set_alpha(alpha)
         ax.add_patch(patch)
         return patch
     return _gradient(ax, patch, start, end, base, tip, alpha, alpha)
 
 
-def gradient_peak(ax, x, y, family='blue', baseline=0,
+def raw_point_offsets(count, width, central_fraction=.40):
+    """Deterministic positions spanning the central fraction of a bar's width."""
+    if count < 1 or width <= 0 or not 0 < central_fraction <= 1:
+        raise ValueError('Expected positive count/width and central_fraction in (0,1].')
+    return np.linspace(-central_fraction/2,central_fraction/2,count)*width
+
+
+def raw_data_bar(ax, position, values, family='primary1', width=.56,
+                 error_kind=None, label=None, horizontal=False):
+    """Mean bar with optional SD/SEM and every raw value; never invent uncertainty.
+
+    The solid bar has a light face and outline boundary. Raw observations have light
+    faces/main edges at their true value, evenly spanning the central 40% of bar width.
+    Bar errors are neutral dark and topmost. Pass error_kind='sd' or 'sem' explicitly.
+    """
+    values=np.asarray(values,dtype=float)
+    if values.ndim != 1 or len(values) < 1 or not np.isfinite(values).all():
+        raise ValueError('Expected one or more finite raw observations.')
+    if family not in PRIMARY:
+        raise ValueError('Raw-data bars require a four-level primary family.')
+    if horizontal:
+        raise NotImplementedError('Adapt raw-point coordinates explicitly for horizontal bars.')
+    if error_kind not in (None,'sd','sem'):
+        raise ValueError("error_kind must be None, 'sd', or 'sem'.")
+    if error_kind is not None and len(values) < 2:
+        raise ValueError('At least two observations are required for SD/SEM.')
+    f=FAMILIES[family];mean=float(values.mean());offsets=raw_point_offsets(len(values),width)
+    bar=ax.bar(position,mean,width=width,facecolor=f['light'],edgecolor=f['outline'],
+               linewidth=.75,label=label,zorder=1)
+    points=ax.plot(position+offsets,values,ls='none',marker='o',ms=3.,mfc=f['light'],
+                   mec=f['main'],mew=.45,zorder=4)
+    error=None;container=None
+    if error_kind is not None:
+        error=float(values.std(ddof=1))
+        if error_kind=='sem': error/=np.sqrt(len(values))
+        container=ax.errorbar(position,mean,yerr=error,fmt='none',ecolor=NEUTRALS['dark'],
+                              elinewidth=.75,capsize=1.8,capthick=.75,zorder=8)
+    return {'bar':bar,'points':points,'errorbar':container,'mean':mean,
+            'error':error,'offsets':offsets}
+
+
+def gradient_peak(ax, x, y, family='primary1', baseline=0,
                   alpha_base=FILL_ALPHA_BASE, alpha_tip=FILL_ALPHA_TIP):
     """Positive peak over a constant baseline; outline must be drawn separately.
 

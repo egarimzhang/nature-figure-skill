@@ -1,53 +1,53 @@
 # Maintained preview entry points
 
-Latest approved palette test (180 × 54.88 mm) uses three panels: two-primary-plus-orange
-XPS, two objects with two main/mid measurements, and three bars each with four solid
-outline/main/mid/light layers, 12 values and no error bars. Orange is explicitly enabled
-only for this XPS recipe. This is synthetic visual QA, not a chemical assignment.
+All previews use simulated data, not experimental claims or chemical assignments. Use
+an explicit output directory outside the installation. Shared helpers are imported from
+adjacent scripts; deliver standalone figures by embedding those helpers with source_data.
+
+## Current six-colour palette
 
 ```bash
-python scripts/preview_approved_palette.py OUTPUT_DIRECTORY
-```
-
-The script imports canonical helpers and uses small stable fixtures under
-`../assets/approved-palette-data/`. It exports the figure and both literal role cards,
-parameters and data; it does not install anything. A current PNG is shown in the README.
-This four-layer/no-error recipe does not remove the separate cumulative-error examples.
-
-
-The current synthetic chemistry reference is `../scripts/preview_template.py`, a compact
-180 × 153.65 mm 3×3 layout: GC before/after with a second-primary emerging-peak window; four paired
-point-lines; one-family three-layer annotated stacks with cumulative SD; three-colour
-XPS (orange explicitly enabled for this fixed test); twin-axis selectivity bars/conversion line; two-family six-layer annotated stacks;
-CV with grey reference; temperature-XRD map; blue-below/coral-above Raman with separator.
-All data are simulated, peak/phase names are illustrative, and n=4 applies only to the
-mock stack repeats. Fixtures under `../assets/preview-data/` keep this visual test stable.
-
-```bash
-python scripts/preview_template.py OUTPUT_DIRECTORY
-```
-
-This preview exercises 4.5 pt point-line/legend markers, edge-aware bar margins, 12 mm
-row gaps, and colourbar-border alignment to the ordinary panel b rather than the narrowed
-twin e. Common style/colour helpers are imported from adjacent scripts. Pass an output directory
-outside the installation; without an argument the preview uses a relative template-preview
-directory in the current working directory.
-
-The supplemental five-colour test is retained:
-
-```bash
+python scripts/preview_six_colors.py OUTPUT_DIRECTORY
+# Compatibility entry points for the same preview:
 python scripts/preview_palette.py OUTPUT_DIRECTORY
-# Compatibility alias for that same five-colour test:
 python scripts/preview_colors.py OUTPUT_DIRECTORY
 ```
 
-It retains five-family role swatches and five-component XPS, with the explicit colour
-extension limited to this fixed QA recipe (including orange in its b/f panels); it does not change the rule requiring user instruction
-for orange/teal/auxiliary violet. Its typography/layout follow the same maintained helpers.
+The approved 120 × 102.27 mm abcd layout preserves 46 × 35.38 mm frames: six-colour
+XPS; two objects/two main-mid measurements; three bars/four primary levels/no errors;
+two Raman families with six offset spectra each. Primary 3 plus the three one-anchor
+auxiliaries are explicitly enabled in a, not automatically used elsewhere. Fixtures are in assets/six-colour-preview-data.
+The README shows its PNG; the script also exports role cards, editable vectors and data.
 
-Deliver a standalone source by embedding the needed colour/style functions and providing
-its adjacent source_data, not by exposing imports tied to an installed skill directory.
-All previews export SVG/PDF/PNG/TIFF and numerical parameters/source data; the main preview
-also records geometry/colour checks. Use api.md for actual experiments, never preview
-arrays or placeholder scientific assignments. Historical atlases are structure references,
-not maintained typography/colour/spacing defaults.
+## Electrochemistry nine-panel stress test
+
+```bash
+python scripts/preview_electrochemistry.py OUTPUT_DIRECTORY
+```
+
+a: potential-dependent signed IR reference difference and aligned colourbar; b: three-colour
+XPS (Primary 3 explicitly requested); c: two paired objects; d: single closed CV loop with
+outline/light fill; e: Primary 1/2 grouped raw-data bars with SD; f: vertically offset two-family
+PDOS with outline/light fill; g: illustrative reaction barriers with a designated step in the second active primary; h: temperature-XRD map with aligned colourbar; i: two Nyquist model curves.
+Scientific conventions and mock model parameters are exported beside the figure. No
+surface-phase identification, spin assignment or experimental rate-control inference
+is implied. Both colourbars reference ordinary 1.3:1 frames, never narrowed neighbours.
+
+## Other maintained chemistry recipes
+
+```bash
+python scripts/preview_approved_palette.py OUTPUT_DIRECTORY
+python scripts/preview_template.py OUTPUT_DIRECTORY
+```
+
+The first is the earlier abc layout with current colours: three-colour XPS (explicit
+Primary 3 yellow), paired lines and four-layer no-error stacks. The second preserves the prior
+3×3 geometry/uncertainty stress test: GC, paired curves, cumulative-error stacks, XPS,
+twin axes, six-layer stacks, CV, XRD and Raman. The current palette is applied; prior
+synthetic blue/red fixture keys are migrated to primary1/primary2 without altering values.
+The six-colour fixture keeps a documented source-key mapping inside its script.
+
+All tests exercise the fixed Arial typography, 4.5 pt paired markers, bar margins,
+12 mm row gaps and standard colourbar boundary. Numerical parameters and editable
+SVG/PDF/PNG/TIFF accompany the source. Historical galleries are structural references,
+not active colours/fonts or scientific processing instructions.

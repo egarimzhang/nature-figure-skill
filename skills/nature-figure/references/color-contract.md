@@ -1,109 +1,50 @@
 # Unified colour contract
 
-Canonical numbers: `../scripts/publication_colors.py`. Layout/typography remain in
-[layout-contract.md](layout-contract.md). Historical gallery palettes are not defaults.
+Canonical values live in `../scripts/publication_colors.py`; geometry lives in `layout-contract.md`. Choose one registered two-primary scheme per figure. Primary 3 yellow and Primary 4 orange are mutually exclusive alternatives and must not appear together. A scheme defines colour availability, not control/treatment semantics or a required area ratio.
 
-## Two primary families
-
-Only primary 1 (blue-violet) and primary 2 (coral) are default category families, in
-that order. Existing code/data keys `blue` and `red` retain compatibility; primary 1
-is not the separate auxiliary `violet` family. Equal categories have equal standing:
-never invent a control/hero or force a blue-area quota. Keep identities consistent
-across linked panels. Do not replace these user-specified anchors by generated tints.
+## Four primary families
 
 | Family / code key | light | mid | main | outline |
 |---|---|---|---|---|
-| Primary 1 / blue | #DBDBDB | #C5C5E0 | #666EB0 | #3F3770 |
-| Primary 2 / red | #DBD1B8 | #E0A988 | #E0725E | #B35B4B |
+| Primary 1, blue-violet / primary1 | #D9DBEF | #9FA5D6 | #666EB0 | #4D5384 |
+| Primary 2, coral / primary2 | #F9E3E0 | #F0BAB0 | #E0725E | #B35B4B |
+| Primary 3, yellow / primary3 | #FCE3C8 | #F7CE9A | #F7BC71 | #E39C40 |
+| Primary 4, orange / primary4 | #FFD2AA | #FFA450 | #DE6D04 | #BF5E04 |
 
-Primary 1's neutral-grey light and primary 2's beige light are intentional. Within a
-stack they identify components, not automatic references or missing data. Keep explicit
-labels when a grey reference also occurs. The exact anchors are styling roles, not an
-assertion that every adjacent swatch is a perceptually uniform numerical interval.
+Registered schemes are `primary1/primary2` (default), `primary1/primary3`, and `primary1/primary4`. The exact anchors are categorical starting points, not a perceptually uniform numeric scale.
 
-Orange, teal and auxiliary violet are all explicit-request-only supplements; never
-silently add them for a third category. Existing auxiliary anchors remain orange main
-#F3962F / mid #F6AD5D / light #FACC8F / outline #BE7525; teal main #42949E; violet main
-#9A4D8E. Their remaining variants are defined in the canonical helper. Avoid red+teal
-coexistence unless that combination is explicitly requested, e.g. the five-colour test.
-More than two categories may need marker/line-style/facet distinctions or a colour
-extension request. Do not cycle ambiguous colours, drop data, or infer authorization
-from an old demonstration. A requested extension applies to the relevant figure/panel.
+## Scheme-specific on-request order
 
-## Roles and paired measurements
+A third data colour requires an explicit multi-colour/on-request instruction; the number of data rows alone does not authorize more colours.
 
-| Role | Use |
-|---|---|
-| main | Independent curves/points and family anchor |
-| mid | Ordinary bar fill; lighter of two related measurements |
-| light | Light component/fill when appropriate; not a default thin curve |
-| outline | Spectral boundaries or the deepest fourth stack level |
+| Active scheme | First on-request colour | Further one-anchor auxiliaries |
+|---|---|---|
+| primary1/primary2 | primary3 yellow | cyan → blue → violet |
+| primary1/primary3 | primary2 coral | cyan → blue → violet |
+| primary1/primary4 | cyan | blue → violet |
 
-Curves normally use main. Two measurements of one object use main and mid, reinforced
-with solid/filled versus dashed/hollow marks where appropriate. Primary-1 paired colours
-are #666EB0/#C5C5E0; primary-2 colours are #E0725E/#E0A988. Do not use dark outline for
-all ordinary curves or introduce an independent fifth colour tier. Thin marks may need
-stronger colour than blocks; start from these roles and preserve family identity.
+Primary 3 and 4 never enter the same automatic sequence. Primary 4 may replace Primary 3 by explicit scheme choice, but it is not appended after Primary 3. For the Primary 1/4 scheme, cyan is deliberately the first extension; Primary 2 is not inserted automatically. Auxiliary anchors are cyan `#A0DBCC`, blue `#9AC9DB`, and violet `#D7BDDB`. Each has one anchor near mid/main strength, not a fixed four-level ladder; derive an outline only when needed. Explicit requested identity/order overrides the table. Never silently cycle, omit categories, or imply chemical identity/control status through palette position.
 
-`line` is a deprecated alias of outline; `pair_light` is a deprecated alias of mid.
-Keep aliases only for existing scripts. New code, docs and colour cards use the four
-roles above; paired curves read `main`/`mid` directly.
+## Curves, points and errors
 
-Axes, ticks, titles and ordinary text use #4D4D4D. Grey baseline/control traces should
-remain readable, not automatically faint or thin. Ordinary equal categories are not
-automatically demoted to grey. Series-linked text may use series colour; white text
-on dark fills is a readability exception.
+Independent curves use main. Two related measurements of one object use main + mid, reinforced with solid/filled versus dashed/open markers when helpful. Light is too weak for a routine equal-status measurement and is reserved for fills or deliberately backgrounded signals. `line` aliases outline and `pair_light` aliases mid for compatibility only.
 
-## Bars and stacks
+Point-line markers remain 4.5 pt with 0.6 pt edges. Point-line error bars use their series family outline so overlapping uncertainties retain identity. Bar-chart error bars instead use the neutral axis colour `#4D4D4D` and sit above raw points and bars. Error stroke/cap thickness is 0.75 pt with capsize 1.8 pt. Error definition and n must be supplied or explicitly agreed; never invent uncertainty.
 
-Ordinary bars use mid at the value endpoint, mid mixed with white by 18% at the baseline,
-alpha 1. The positive/negative and vertical/horizontal rule is identical: deeper away
-from baseline. Keep the same relative tint span, no outlines/shadows/3-D. Bar/group
-width is about 50–60% of spacing, with outer-edge margins from layout-contract.md.
+## Closed shapes and ordinary bars
 
-Stacks use solid, literal family swatches, not internal decorative gradients:
+A non-peak closed shape defaults to the primary family light face and outline boundary. This includes CV loops, PDOS areas, ordinary area polygons and comparable bounded regions; alpha 0.65 is the starting point when underlying marks must remain visible. Preserve acquisition order, baselines, signs and display-offset meaning. Do not use a fill merely because a path happens to be closed if area has no intended role.
 
-- Three components: `stack_levels(family)` gives main, mid, light bottom to top.
-- Four components: `stack_levels(family, count=4)` gives outline, main, mid, light.
-- Six components in two specified groups: first-family main/mid/light followed by
-  second-family light/mid/main, using `reverse=True` for the second three-layer block.
+Ordinary non-stacked bars use a solid light face and outline border, with no automatic decorative gradient. When raw observations are supplied, place every point at its true value and distribute x positions deterministically across the central 40% of bar width. Three points occupy 30%, 50%, 70% from the left edge; four occupy 30%, 43.33%, 56.67%, 70%. Raw dots are 3.0 pt with light faces, main edges and 0.45 pt edge width. Draw the neutral error bar last/topmost. Bar height is the declared summary, normally the arithmetic mean when raw replicates are shown. Use `raw_data_bar(..., error_kind='sd'|'sem')` only with an explicit error definition.
 
-These are optional mappings, never permission to reorder components or change data.
-Number of bars and number of layers per bar are independent. Four layers means four
-components in every bar. Per-layer values are opt-in, centred with contrasting ink.
-Error bars are optional and require supplied or agreed uncertainty semantics; do not
-invent replicates/errors or add errors to a requested no-error chart. When requested,
-retain the cumulative-error rules in chart-types.md/API. The approved abc preview has
-three bars, four layers each, 12 values, and no errors; it is not a universal bar count.
+Stacks remain literal solid levels because their internal colours encode components: three layers main/mid/light; four layers outline/main/mid/light; two requested three-layer families may use first main/mid/light and second light/mid/main. These mappings never reorder data. The number of layers, bars and replicates are independent.
 
-## Spectra, highlights and ordered curves
+## Peak-shaped gradient exception
 
-Positive fitted peaks use main at the tip and main mixed with 38% white at the baseline;
-alpha goes from 0.40 at baseline to 0.82 at peak, with an outline-role boundary. These
-are derived gradient endpoints, not substitutions for the literal light swatch. This
-preserves visibility in crowded XPS. Adapt density/opacity without losing identity.
-Overlaps do not imply extra components. Raw points, total fit and background use distinct
-styles and readable greys. The helper supports constant baselines; adapt sloping/signed
-cases explicitly. Never infer chemical assignments or processing from colour.
+Positive decomposed/fitted peaks such as XPS use a peak gradient rather than the ordinary closed-shape light fill. The family main (or an authorized auxiliary anchor) appears at the peak; a 38% white tint appears at the baseline; alpha increases from 0.40 to 0.82; an outline curve remains readable. This exception applies to scientifically meaningful peak-shaped spectral components, not arbitrary closed polygons. Raw points, total fit and background remain distinct and usually neutral. Preserve overlap visibility, export the component data and never infer peak assignments or fits merely for appearance.
 
-The approved GC comparison uses a grey before trace and primary-1 main after trace,
-with documented offsets and no divider. A requested emerging-peak window uses second-
-primary main at alpha 0.35, no border, behind both traces. Choose location from data;
-this does not authorize orange highlights. CV/temperature series use ordered family
-shades with explicit rate/cycle/temperature labels and readable grey references. Raman
-may place primary 1 below primary 2 with a requested grey separator. Preserve observations;
-do not smooth, normalize or fit merely for style.
+## Maps, text and export
 
-## Numeric scales and editing
+Axes, ticks, titles, bar errors and ordinary text use `#4D4D4D`. Series annotations may use the series colour; white text on a dark fill is a readability exception. Continuous intensity uses an ordered scale and interpretable colourbar. Signed changes use a meaningful neutral centre; `diverging_cmap(scheme=...)` uses the active pair. State reference and sign convention for difference maps. Keep source matrices for raster maps and document normalization, offsets and interpolation.
 
-Continuous intensity needs an ordered, interpretable scale and colourbar. The sequential
-helper progresses from a near-white main tint through light/mid/main/outline; inspect
-lightness/contrast for the actual output. Signed deviations need a meaningful centre,
-e.g. primary 1–pale neutral–primary 2. Categorical swatches do not mean signed numerical
-values. Domain-specific elemental or microscopy-channel semantics take precedence.
-
-Copy the needed helpers and colour constants into deliverable code; no installed-path
-dependencies. Prefer native SVG gradients on a fixed canvas. PDF retains vector strips;
-raster scientific heatmaps are allowed with disclosure/data. Manual SVG edits do not
-update Python; propagate accepted edits into code for reproducibility. The approved
-palette preview is documented in tutorials.md and executes the canonical helpers.
+Deliver standalone editable Python, native SVG gradients, fixed-size SVG/PDF and preview PNG. Manual SVG edits do not update Python. See `tutorials.md` for maintained synthetic previews.

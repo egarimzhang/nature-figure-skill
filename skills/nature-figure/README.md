@@ -8,18 +8,18 @@ Three-panel final-width reference: 180 mm; plots 46 × 35.38 mm; Arial axes 8 pt
 text 7.5 pt and panel labels 12 pt. Dark-grey full frames 0.75 pt, curves 1.125 pt.
 Point-line markers 4.5 pt, multirow frame gaps 12 mm, outer-edge bar margins. Colourbar
 right borders follow the ordinary unshortened column frame, not narrowed twins.
-Two core families: blue-violet #666EB0 and coral #E0725E. Main/mid paired curves,
-mid ordinary bars, outline spectral edges. Orange/teal/auxiliary violet require explicit
-user instruction. Exact light/mid/main/outline swatches are in the colour contract.
+Registered two-family schemes: blue-violet/coral (default), blue-violet/yellow, and blue-violet/orange. Primary 3 yellow and Primary 4 orange are mutually exclusive. Curves use main, paired curves main/mid, ordinary bars and non-peak closed shapes light/outline. Scheme-specific extensions require explicit instruction; cyan/blue/violet retain one anchor each.
 
-Approved palette test: `python scripts/preview_approved_palette.py OUTPUT_DIRECTORY`.
-XPS with explicitly requested orange, two paired objects, four-layer stacks without errors:
+Approved palette test: `python scripts/preview_six_colors.py OUTPUT_DIRECTORY`.
+Six-colour XPS, two paired objects, four-layer stacks without errors, and two-family Raman:
 
 ![Current approved palette on simulated data](assets/gallery/current-palette.png)
 
+Electrochemistry nine-panel test: `python scripts/preview_electrochemistry.py OUTPUT_DIRECTORY`.
+
 Python helpers: `scripts/publication_colors.py`, `scripts/publication_style.py`.
-Current synthetic stress test: `python scripts/preview_template.py OUTPUT_DIRECTORY`.
-Supplemental five-family swatches/XPS: `python scripts/preview_palette.py OUTPUT_DIRECTORY`.
+Earlier chemistry stress test: `python scripts/preview_template.py OUTPUT_DIRECTORY`.
+Compatibility entry point for the current six-colour palette test: `python scripts/preview_palette.py OUTPUT_DIRECTORY`.
 See [API](references/api.md), [tutorial](references/tutorials.md), [QA](references/qa-contract.md)
 and [R workflow](references/r-workflow.md). Backend selection persists within a conversation;
 no cross-language drawing fallback. Final scripts embed needed helpers and expose parameters.

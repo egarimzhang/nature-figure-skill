@@ -36,13 +36,13 @@
     {
       "id": "equal-xps-colours",
       "prompt": "Use Python to compare two equally important sample spectra and their two fitted components. No auxiliary colours are requested.",
-      "expected_output": "Use only primary 1 (#666EB0 main) and primary 2 (#E0725E main), without inventing a control or hero. Use readable translucent peak gradients and outline edges, neutral raw points/total/background. No orange, teal or auxiliary violet. Use exact approved anchors and #4D4D4D framing.",
+      "expected_output": "Use only active Primary 1 (#666EB0 main) and Primary 2 (#E0725E main), with peak gradients and outline edges, neutral raw points/total/background. Do not add Primary 3/4 or auxiliaries without an on-request instruction.",
       "files": []
     },
     {
       "id": "category-overflow",
       "prompt": "Use Python to compare five independent equal samples. Do not introduce additional colours without asking.",
-      "expected_output": "Do not silently cycle category colours, drop series, or add orange/teal/auxiliary violet. Resolve using markers, line styles or panels, or ask for colour extension.",
+      "expected_output": "Do not silently cycle, drop series, or add inactive primaries/auxiliaries. Resolve using markers, line styles or panels, or ask for an explicit extension.",
       "files": []
     },
     {
@@ -78,7 +78,7 @@
     {
       "id": "bar-margins-irregular-groups",
       "prompt": "Use Python for grouped bars at irregular positions, with unequal group widths and no supplied x limits.",
-      "expected_output": "Keep actual centres/widths. Compute limits from all outer bar edges and add visible side margins; do not use only group centres or copy 180–820 from the preview. Include error endpoints and any other observations. Preserve explicit user limits when supplied.",
+      "expected_output": "Keep actual centres/widths. Compute limits from all outer bar edges and add visible side margins; do not use only group centres or copy 180\u2013820 from the preview. Include error endpoints and any other observations. Preserve explicit user limits when supplied.",
       "files": []
     },
     {
@@ -96,13 +96,37 @@
     {
       "id": "four-layer-no-errors",
       "prompt": "Use Python to plot three single-family bars with four components each, numeric segment labels, no error bars.",
-      "expected_output": "Use 12 segments, not four bars or three layers. Bottom-to-top exact primary-1 outline #3F3770, main #666EB0, mid #C5C5E0, light #DBDBDB. Keep neutral-grey light unchanged. No invented replicates or errors; retain zero, margins and contrasting numeric labels.",
+      "expected_output": "Use 12 segments, not four bars or three layers. Bottom-to-top exact primary-1 outline #4D5384, main #666EB0, mid #9FA5D6, light #D9DBEF. Keep the specified blue-violet light unchanged. No invented replicates or errors; retain zero, margins and contrasting numeric labels.",
       "files": []
     },
     {
-      "id": "explicit-orange-xps",
-      "prompt": "Use Python for XPS with both primary families and orange; add two objects with two point-line measurements each.",
-      "expected_output": "Orange is allowed in the requested XPS, with visible outlines and translucent gradients. Paired lines use primary-1 main/mid #666EB0/#C5C5E0 and primary-2 main/mid #E0725E/#E0A988, filled/solid versus hollow/dashed, markers 4.5 pt. Do not add teal/violet or make orange a default.",
+      "id": "explicit-yellow-xps",
+      "prompt": "Use Python for XPS with both primary families and yellow; add two objects with two point-line measurements each.",
+      "expected_output": "Treat yellow as four-level Primary 3, not a one-anchor auxiliary. With active Primary 1/2 and an explicitly requested third XPS colour, Primary 3 is first on request and uses a readable gradient/outline. Paired lines remain main/mid with 4.5 pt markers.",
+      "files": []
+    },
+    {
+      "id": "auxiliary-priority",
+      "prompt": "Use the Primary 1/2 scheme and one requested extra XPS colour. Then show the full six-colour Primary 1/2 extension.",
+      "expected_output": "Choose Primary 3 yellow first. The six-colour extension is Primary 1, Primary 2, Primary 3, cyan, blue, violet. Do not include Primary 4 orange with Primary 3.",
+      "files": []
+    },
+    {
+      "id": "primary-scheme-switching",
+      "prompt": "Create three versions using Primary 1/2, Primary 1/3 and Primary 1/4; each needs one on-request XPS component.",
+      "expected_output": "Use the exact registered pair. First on request is Primary 3 for scheme 1/2, Primary 2 for scheme 1/3, and cyan for scheme 1/4. Primary 4 uses light #FFD2AA, mid #FFA450, main #DE6D04 and outline #BF5E04. Primary 3 and 4 never coexist.",
+      "files": []
+    },
+    {
+      "id": "closed-fill-and-peak-exception",
+      "prompt": "Plot a filled CV loop, filled PDOS and decomposed XPS peaks.",
+      "expected_output": "CV and PDOS use light faces with outline boundaries. XPS components retain main-at-peak translucent gradients with readable outlines; the peak exception does not spread to arbitrary closed polygons.",
+      "files": []
+    },
+    {
+      "id": "raw-data-bar-grammar",
+      "prompt": "Plot mean bars with three raw replicates and SD, for two active families.",
+      "expected_output": "Solid light faces/outline borders; 3.0 pt raw points have light faces/main edges at true y values and 30/50/70% bar-width x positions. Neutral #4D4D4D SD bars are drawn topmost. Point-line errors would instead use family outline.",
       "files": []
     }
   ]
