@@ -1,16 +1,16 @@
 # Backend Selection
 
-At the start of a figure task, ask the user to choose **Python or R** if they have
-not already specified a backend. This is a blocking gate: stop after asking and wait
-for the user's answer. Do not infer Python just because the task involves simulation,
-NumPy-like data, or custom layout, and do not infer R just because the task is biological
-or omics-adjacent.
+At the start of a figure task, default to **Python** without asking the user to choose
+a backend. Use R only when the user explicitly requests it. A language-specific workflow
+or file may inform a recommendation, but it does not silently override the Python default.
+If such material cannot be handled faithfully in Python, report the incompatibility instead
+of switching backends implicitly.
 
 Use the decision table only in either of these cases:
 
 - the user explicitly asks you to recommend or choose the backend;
-- the user provides an unambiguous language-specific workflow or file, such as an `.R`
-  script, RDS object, Python notebook, or existing Python plotting code.
+- the user asks for guidance about adapting an existing language-specific workflow or file,
+  such as an `.R` script, RDS object, Python notebook, or existing Python plotting code.
 
 ## Quick decision table
 
