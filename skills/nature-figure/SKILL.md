@@ -1,7 +1,7 @@
 ---
 name: nature-figure
 description: >-
-  Submission-grade Nature/high-impact journal figure workflow for Python or R. Use whenever the user asks to create, revise, audit, or polish manuscript figures, multi-panel scientific plots, figures4papers-style matplotlib plots, or journal-ready SVG/PDF/TIFF outputs, especially for Nature-family or other high-impact journals. Before plotting, define the figure's conclusion, evidence logic, export needs, and review risks. If the user has not chosen Python or R, ask "Python or R?" and stop. Use only the selected backend for figure generation, previewing, exporting, and QA. Supports matplotlib/seaborn and ggplot2/patchwork/ComplexHeatmap. Not for dashboards or Illustrator/Figma-first infographics.
+  Submission-grade Nature/high-impact journal figure workflow for Python or R. Use whenever the user asks to create, revise, audit, or polish manuscript figures, multi-panel scientific plots, figures4papers-style matplotlib plots, or journal-ready SVG/PDF/TIFF outputs, especially for Nature-family or other high-impact journals. Before plotting, define the figure's conclusion, evidence logic, export needs, and review risks. Default to Python unless the user explicitly requests R. Use only the selected backend for figure generation, previewing, exporting, and QA. Supports matplotlib/seaborn and ggplot2/patchwork/ComplexHeatmap. Not for dashboards or Illustrator/Figma-first infographics.
 ---
 
 # Nature Figure Making Skill
@@ -12,8 +12,8 @@ do not invent a scientific conclusion. Preserve user-specified panels and compar
 
 ## Backend and scope
 
-If Python/R has not been selected in the conversation, ask **Python or R?** and stop.
-An existing explicit selection persists across revisions. Use that backend exclusively
+Default to Python without asking the user to choose a backend. Use R only when the user
+explicitly requests R. An existing explicit selection persists across revisions. Use that backend exclusively
 for drawing, previewing, export and visual QA. Check its runtime/packages before drawing;
 if unavailable, report the exact blocker instead of switching languages. Read
 [backend-selection.md](references/backend-selection.md) only for a requested recommendation.
