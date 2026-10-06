@@ -58,7 +58,7 @@ def main(out):
            marker='o', ms=2.2, mfc='none', mec='#969696', mew=.55, zorder=5)
     a.axhline(baseline, color=NEUTRALS['mid'], lw=STYLE['axis_width'], ls=':')
     a.set(xlim=(293.2,281.8), ylim=(0,1.28), xticks=[292,290,288,286,284,282],
-          yticks=[0,.4,.8,1.2], xlabel='Binding energy / eV', ylabel='Intensity / a.u.')
+          yticks=[0,.4,.8,1.2], xlabel='Binding energy (eV)', ylabel='Intensity (a.u.)')
     a.text(.03,.97,'XPS',transform=a.transAxes,va='top')
     assert np.allclose(sum(spectrum[n] for n in PREVIEW['xps_families'])+baseline,
                        spectrum['total'])
@@ -74,7 +74,7 @@ def main(out):
                    mfc=color if measurement==1 else 'white', mew=STYLE['marker_edge'],
                    ls='-' if measurement==1 else '--', label=f'{chr(65+j)}{measurement}')
     b.set(xlim=(180,820), ylim=(0,100), xticks=[300,400,500,600,700],
-          yticks=[0,25,50,75,100], xlabel=r'$T$ / K', ylabel='Response / %')
+          yticks=[0,25,50,75,100], xlabel=r'$T$ (K)', ylabel='Response (%)')
     b.legend(loc='lower center', bbox_to_anchor=(.5,1.03), ncol=4, frameon=False,
              handlelength=1.05, handletextpad=.3, columnspacing=.7, borderaxespad=0, borderpad=.1)
 
@@ -94,7 +94,7 @@ def main(out):
                    color=ink, fontsize=STYLE['text_font'], zorder=5)
         base += values[:,j]
     c.set(xticks=[300,500,700], yticks=[0,25,50,75,100],
-          xlabel=r'$T$ / K', ylabel='Fraction / %')
+          xlabel=r'$T$ (K)', ylabel='Fraction (%)')
     set_percentage_axis(c, values=base)
     set_bar_padding(c, temperatures, PREVIEW['bar_width_data'])
     c.legend(loc='upper left', ncol=4, frameon=False, handlelength=.9,

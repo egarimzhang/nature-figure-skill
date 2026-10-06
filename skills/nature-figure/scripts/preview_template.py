@@ -34,7 +34,7 @@ def read_csv(path):
 
 def percentage_axes(ax,label,xticks=(300,500,700)):
     ax.set(xlim=PREVIEW['temperature_limits'],ylim=(0,100),xticks=xticks,
-           yticks=[0,25,50,75,100],xlabel=r'$T$ / K',ylabel=label)
+           yticks=[0,25,50,75,100],xlabel=r'$T$ (K)',ylabel=label)
     set_bar_padding(ax,xticks,PREVIEW['bar_width_data'])
     ax.xaxis.set_major_formatter(FormatStrFormatter('%.0f'))
 
@@ -90,7 +90,8 @@ def preview(out, source_dir=None):
                fontsize=STYLE['text_font'],color=NEUTRALS['dark'],
                arrowprops=dict(arrowstyle='->',lw=STYLE['axis_width'],color=NEUTRALS['dark'],shrinkA=1,shrinkB=2))
     a.set(xlim=(0,10),ylim=(-.07,2.48),xticks=[0,2,4,6,8,10],yticks=[],
-          xlabel='Retention time / min',ylabel='Signal / a.u.')
+          xlabel='Retention time (min)',ylabel='Signal (a.u.)')
+    set_x_minor_ticks_from_data(a,rt)
     a.yaxis.set_minor_locator(NullLocator())
     np.savetxt(data_dir/'a_gc.csv',np.column_stack([rt,before,after,after+PREVIEW['gc_display_offset'],new_peak]),delimiter=',',
                header='retention_time_min,before_raw,after_raw,after_display_offset,added_synthetic_peak',comments='')
@@ -106,7 +107,8 @@ def preview(out, source_dir=None):
             b.plot(sel['temperature_K'],sel['response_percent'],color=color,lw=STYLE['curve_width'],
                    marker=marker,ms=STYLE['marker_size'],mfc=color if measure==1 else 'white',
                    mec=color,mew=STYLE['marker_edge'],ls='-' if measure==1 else '--',label=f'{chr(65+j)}{measure}')
-    percentage_axes(b,'Response / %',xticks=[300,400,500,600,700])
+    percentage_axes(b,'Response (%)',xticks=[300,400,500,600,700])
+    set_x_minor_ticks_from_data(b,paired['temperature_K'])
     legends.append(b.legend(loc='lower center',bbox_to_anchor=(.5,1.03),ncol=4,
                 frameon=False,fontsize=STYLE['text_font'],handlelength=1.05,handletextpad=.3,
                 columnspacing=.7,borderaxespad=0,borderpad=.15,labelspacing=.65))
@@ -116,7 +118,8 @@ def preview(out, source_dir=None):
     cool_levels=stack_levels('primary1')
     means,cumulative,sd=stacked_bars(c,stack['temperature_K'],stack['replicates'],cool_levels,
                 error_kind='sd',error_scope='cumulative',width=PREVIEW['bar_width_data'],labels=['I','II','III'],annotate=True)
-    percentage_axes(c,'Fraction / %')
+    percentage_axes(c,'Fraction (%)')
+    set_x_minor_ticks_from_data(c,stack['temperature_K'])
     set_percentage_axis(c,values=np.r_[cumulative.ravel()+sd.ravel(),cumulative.ravel()-sd.ravel()])
     legends.append(c.legend(loc='upper left',ncol=3,frameon=False,fontsize=STYLE['text_font'],
                         handlelength=1.1,handletextpad=.35,columnspacing=.7,borderpad=.2))
@@ -136,7 +139,8 @@ def preview(out, source_dir=None):
     d.plot(energy[::13],raw[::13],ls='none',marker='o',ms=2.2,mfc='none',mec='#969696',mew=.55,zorder=5)
     d.axhline(baseline,color=NEUTRALS['mid'],lw=STYLE['axis_width'],ls=':')
     d.set(xlim=(293.2,281.8),ylim=(0,1.28),xticks=[292,290,288,286,284,282],yticks=[0,.4,.8,1.2],
-          xlabel='Binding energy / eV',ylabel='Intensity / a.u.')
+          xlabel='Binding energy (eV)',ylabel='Intensity (a.u.)')
+    set_x_minor_ticks_from_data(d,energy)
     d.text(.03,.97,'XPS',transform=d.transAxes,va='top')
     np.savetxt(data_dir/'d_xps.csv',np.column_stack([energy,raw,fit,*components]),delimiter=',',
               header='binding_energy_eV,synthetic_observation,total,primary1,primary3,primary2',comments='')
@@ -145,10 +149,11 @@ def preview(out, source_dir=None):
     temperatures=np.array([300,500,700]);selectivity=np.array([54,70,82]);conversion=np.array([28,55,88])
     for t,value in zip(temperatures,selectivity):
         gradient_bar(e,t,value,'primary1',width=PREVIEW['bar_width_data'])
-    percentage_axes(e,'Selectivity / %')
-    right=make_twin_axis(e);right.set(ylim=(0,100),yticks=[0,25,50,75,100],ylabel='Conversion / %')
+    percentage_axes(e,'Selectivity (%)')
+    set_x_minor_ticks_from_data(e,temperatures)
+    right=make_twin_axis(e);right.set(ylim=(0,100),yticks=[0,25,50,75,100],ylabel='Conversion (%)')
     right.plot(temperatures,conversion,color=red['main'],lw=STYLE['curve_width'],marker='o',ms=STYLE['marker_size'],mew=STYLE['marker_edge'])
-    legends.append(legend_above(right,[Patch(facecolor=blue['mid'],label='S'),
+    legends.append(legend_above(right,[Patch(facecolor=blue['main'],label='S'),
                     Line2D([],[],color=red['main'],marker='o',ms=STYLE['marker_size'],lw=STYLE['curve_width'],label='X')],ncol=2))
     twin_width=fit_twin_to_width(e,right,target_right_mm=118)
     right_axis_mm=e.get_position().x1*fw
@@ -168,7 +173,8 @@ def preview(out, source_dir=None):
             f.text(t,base+value/2,f'{value:g}',ha='center',va='center',
                    color='white' if j==0 else NEUTRALS['dark'],fontsize=STYLE['text_font'],zorder=4)
         bottom_values+=six_values[:,j]
-    percentage_axes(f,'Fraction / %')
+    percentage_axes(f,'Fraction (%)')
+    set_x_minor_ticks_from_data(f,temperatures)
     legends.append(legend_above(f,ncol=6,handlelength=.7,handletextpad=.2,columnspacing=.3))
     np.savetxt(data_dir/'f_six_segments.csv',np.column_stack([temperatures,six_values]),delimiter=',',
                header='temperature_K,B1,B2,B3,R1,R2,R3',comments='')
@@ -182,10 +188,11 @@ def preview(out, source_dir=None):
         g.plot(sel['potential_V'],sel['schematic_current_density'],color=color,lw=STYLE['curve_width'],
                ls='--' if key=='reference' else '-',label=label)
     g.set(xlim=(-.24,.70),ylim=(-2.3,2.6),xticks=[-.2,0,.2,.4,.6],yticks=[-2,-1,0,1,2],
-          xlabel=r'$E$ / V vs. RHE',ylabel=r'$j$ / mA cm$^{-2}$')
+          xlabel=r'$E$ (V vs. RHE)',ylabel=r'$j$ (mA cm$^{-2}$)')
+    set_x_minor_ticks_from_data(g,cv['potential_V'])
     handles,names=g.get_legend_handles_labels();order=[0,2,1,3]
     legends.append(g.legend([handles[k] for k in order],[names[k] for k in order],loc='upper left',ncol=2,
-                            title=r'$v$ / mV s$^{-1}$',title_fontsize=STYLE['text_font'],handlelength=1.25,
+                            title=r'$v$ (mV s$^{-1}$)',title_fontsize=STYLE['text_font'],handlelength=1.25,
                             handletextpad=.35,columnspacing=.65,labelspacing=.2,borderpad=.1))
 
     # h: use the ordinary panel b as the column reference, not the narrowed twin panel e.
@@ -198,7 +205,8 @@ def preview(out, source_dir=None):
     im=h.imshow(xrd['globally_normalized_intensity'],extent=(20,60,350,750),origin='lower',
                 aspect='auto',interpolation='nearest',cmap=sequential_cmap('primary1'),vmin=0,vmax=1,zorder=1)
     h.set(xlim=(20,60),ylim=(350,750),xticks=[20,30,40,50,60],yticks=[350,450,550,650,750],
-          xlabel=r'$2\theta$ / °',ylabel=r'$T$ / K')
+          xlabel=r'$2\theta$ (°)',ylabel=r'$T$ (K)')
+    set_x_minor_ticks_from_data(h,[20,60])
     h.text(.035,.97,'I → II',transform=h.transAxes,va='top')
     h.text(24,410,'I',ha='center');h.text(34,695,'II',ha='center')
     cb=fig.colorbar(im,cax=cax,ticks=[0,.5,1]);cb.set_ticklabels(['0','0.5','1']);cb.solids.set_rasterized(False);cb.solids.set_edgecolor('face')
@@ -207,7 +215,7 @@ def preview(out, source_dir=None):
              pad=PREVIEW['colourbar_tick_pad_pt'],colors=NEUTRALS['dark'],labelsize=STYLE['axis_font'])
     cax.yaxis.set_minor_locator(FixedLocator([.25,.75]))
     cax.tick_params(which='minor',length=STYLE['minor_length'],width=STYLE['axis_width'],colors=NEUTRALS['dark'])
-    cax.set_title(r'$I$ / a.u.',fontsize=STYLE['text_font'],pad=3)
+    cax.set_title(r'$I$ (a.u.)',fontsize=STYLE['text_font'],pad=3)
 
     # i: previous offset Raman data, lower blue/upper coral, grey separator.
     raman=read_csv(data_dir/'i_raman.csv');shift=raman['raman_shift_cm1']
@@ -219,7 +227,8 @@ def preview(out, source_dir=None):
             i.text(790,base+.6*k+.09,f'{temp} K',ha='right',color=fam['outline'])
     i.axhline(2.05,color=NEUTRALS['mid'],lw=STYLE['axis_width'])
     i.set(xlim=(180,820),ylim=(0,4.25),xticks=[200,400,600,800],yticks=[],
-          xlabel=r'Raman shift / cm$^{-1}$',ylabel='Intensity / a.u.')
+          xlabel=r'Raman shift (cm$^{-1}$)',ylabel='Intensity (a.u.)')
+    set_x_minor_ticks_from_data(i,shift)
     i.yaxis.set_minor_locator(NullLocator())
     i.text(220,1.78,'Primary 1',color=blue['outline']);i.text(220,4.13,'Primary 2',color=red['outline'],va='top')
 
@@ -275,7 +284,7 @@ def preview(out, source_dir=None):
     fig.savefig(stem.with_suffix('.png'),dpi=300,bbox_inches=None)
     fig.savefig(stem.with_suffix('.tiff'),dpi=600,bbox_inches=None,pil_kwargs={'compression':'tiff_lzw'})
     ns={'s':'http://www.w3.org/2000/svg'};svg=ET.parse(stem.with_suffix('.svg')).getroot()
-    assert len(svg.findall('.//s:linearGradient',ns))==3  # XPS peak exception only; ordinary bars are solid
+    assert len(svg.findall('.//s:linearGradient',ns))==6  # three XPS peaks and three bars
     assert len(svg.findall('.//s:image',ns))==1
     styles={el.get('style','') for el in svg.iter() if 'font-family' in el.get('style','')}
     assert styles and all("'Arial'" in s for s in styles)
@@ -286,7 +295,7 @@ def preview(out, source_dir=None):
             'c retains its source stack means and cumulative SD; nine value labels.',
             'f has exactly 18 value labels and six specified blue/coral segment colours.',
             'h colourbar right border equals b ordinary frame; the narrowed e frame is not a reference.',
-            'SVG uses editable Arial text and three native peak gradients; only XRD intensity is raster.']
+            'SVG uses editable Arial text and six native peak/bar gradients; only XRD intensity is raster.']
     (out/'validation.json').write_text(json.dumps({'passed':True,'checks':checks},indent=2)+'\n')
     print(json.dumps({'canvas_mm':[fw,fh],'twin_width_mm':twin_width,'h_width_mm':xrd_width,
                       'colourbar_right_mm':column_right_mm,'panels':9}))

@@ -19,8 +19,9 @@ physical size and 0.6 pt edge; translate to the selected R point-size convention
 than assuming it matches Matplotlib. ggplot2 line widths use mm: convert using
 1 pt = 25.4/72 mm (0.75 pt is about 0.2646 mm), rather than passing point numbers as
 mm widths. Draw a complete panel border without duplicate axis strokes. Minor tick
-rendering should explicitly match the installed ggplot2 capabilities: one unnumbered
-midpoint tick, 1.5 pt length, no grid. Do not silently omit it.
+rendering should explicitly match the observed-x rule: omit x minors when distinct data
+positions match major ticks one-to-one; otherwise draw one unnumbered midpoint tick per
+linear major interval at 1.5 pt, with no grid. Do not silently omit required ticks.
 
 Grid physical units or measured grob bounds provide fixed panel dimensions and letter
 offsets. Do not use auto-tagging that anchors to varying title bounds. Solve twin/colourbar
@@ -38,11 +39,15 @@ anchors; derive their outlines/tints only for the current use. Three/four-
 layer primary stacks use main/mid/light or outline/main/mid/light, with errors only
 when requested and supported. Use distinct primary1/primary2/primary3/primary4 keys, not auxiliary blue.
 
-Ordinary bars use solid light faces with outline borders; stacks remain solid component levels.
+Ordinary bars use opaque main-to-mid gradients from top to bottom without outlines;
+stacks remain solid component levels. Replicate bars show only mean and sample SD,
+with raw observations retained in source data and no individual dots.
 Spectral fills need stronger tint/alpha and outlines. For matched replicate stacks,
 compute cumulative sums per replicate before SD/SEM. State error definitions/n.
 
-Use spaced slash units and italic physical symbols with Arial glyphs. Export SVG/PDF
+Use parenthesized units and italic physical symbols with Arial glyphs. Preserve 8 pt axis
+titles first; move, wrap, or shorten tick numbers with a multiplier before reducing size.
+Keep titles inside the decorated panel and plot frames aligned. Export SVG/PDF
 at exact canvas size; retain editable text and native gradients when the selected R
 implementation supports them, otherwise disclose rasterized fills and keep adjustable
 source. PNG/TIFF can use ragg at appropriate dpi. Reopen exports using R-side tooling

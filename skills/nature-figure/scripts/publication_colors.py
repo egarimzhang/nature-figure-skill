@@ -50,8 +50,8 @@ for name,anchor in AUXILIARY_ANCHORS.items():
 for name,family in FAMILIES.items():
     family['fill_tip']=family['main']
     family['fill_base']=blend(family['main'],amount=.38)
-    family['bar_tip']=family.get('light',family['mid'])
-    family['bar_base']=blend(family['bar_tip'],amount=.08)
+    family['bar_tip']=family['main']
+    family['bar_base']=family['mid'] if name in PRIMARY else blend(family['main'],amount=.38)
     family['line']=family['outline']  # Deprecated compatibility role, never curve default.
     family['pair_light']=family['mid']  # Deprecated role; new primary pairs read mid.
 
@@ -194,7 +194,7 @@ def _gradient(ax, patch, start, end, base_color, tip_color, base_alpha, tip_alph
 
 
 def gradient_bar(ax, position, value, family='primary1', baseline=0, width=0.60,
-                 horizontal=False, gradient=False, tip_color=None, base_color=None, alpha=BAR_ALPHA):
+                 horizontal=False, gradient=True, tip_color=None, base_color=None, alpha=BAR_ALPHA):
     f = FAMILIES[family]
     tip, base = tip_color or f['bar_tip'], base_color or f['bar_base']
     endpoint = baseline + value
@@ -206,8 +206,8 @@ def gradient_bar(ax, position, value, family='primary1', baseline=0, width=0.60,
         start, end = (position, baseline), (position, endpoint)
     if not gradient or value == 0:
         patch.set_facecolor(tip)
-        patch.set_edgecolor(f['outline'])
-        patch.set_linewidth(.75)
+        patch.set_edgecolor('none')
+        patch.set_linewidth(0)
         patch.set_alpha(alpha)
         ax.add_patch(patch)
         return patch
@@ -215,44 +215,51 @@ def gradient_bar(ax, position, value, family='primary1', baseline=0, width=0.60,
 
 
 def raw_point_offsets(count, width, central_fraction=.40):
-    """Deterministic positions spanning the central fraction of a bar's width."""
+    """Explicit opt-in placement helper; summary bars do not show raw points."""
     if count < 1 or width <= 0 or not 0 < central_fraction <= 1:
         raise ValueError('Expected positive count/width and central_fraction in (0,1].')
     return np.linspace(-central_fraction/2,central_fraction/2,count)*width
 
 
-def raw_data_bar(ax, position, values, family='primary1', width=.56,
-                 error_kind=None, label=None, horizontal=False):
-    """Mean bar with optional SD/SEM and every raw value; never invent uncertainty.
+def summary_bar(ax, position, values, family='primary1', width=.56,
+                error_kind='sd', label=None, horizontal=False):
+    """Opaque main-to-mid mean bar and defined uncertainty, without raw dots.
 
-    The solid bar has a light face and outline boundary. Raw observations have light
-    faces/main edges at their true value, evenly spanning the central 40% of bar width.
-    Bar errors are neutral dark and topmost. Pass error_kind='sd' or 'sem' explicitly.
+    Keep the input observations in the delivered source data. A single summarized
+    value may use error_kind=None; two or more observations default to sample SD.
     """
     values=np.asarray(values,dtype=float)
     if values.ndim != 1 or len(values) < 1 or not np.isfinite(values).all():
         raise ValueError('Expected one or more finite raw observations.')
     if family not in PRIMARY:
-        raise ValueError('Raw-data bars require a four-level primary family.')
-    if horizontal:
-        raise NotImplementedError('Adapt raw-point coordinates explicitly for horizontal bars.')
+        raise ValueError('Summary bars require a four-level primary family.')
     if error_kind not in (None,'sd','sem'):
         raise ValueError("error_kind must be None, 'sd', or 'sem'.")
     if error_kind is not None and len(values) < 2:
         raise ValueError('At least two observations are required for SD/SEM.')
-    f=FAMILIES[family];mean=float(values.mean());offsets=raw_point_offsets(len(values),width)
-    bar=ax.bar(position,mean,width=width,facecolor=f['light'],edgecolor=f['outline'],
-               linewidth=.75,label=label,zorder=1)
-    points=ax.plot(position+offsets,values,ls='none',marker='o',ms=3.,mfc=f['light'],
-                   mec=f['main'],mew=.45,zorder=4)
+    mean=float(values.mean())
+    bar=gradient_bar(ax,position,mean,family=family,width=width,horizontal=horizontal)
     error=None;container=None
     if error_kind is not None:
         error=float(values.std(ddof=1))
         if error_kind=='sem': error/=np.sqrt(len(values))
-        container=ax.errorbar(position,mean,yerr=error,fmt='none',ecolor=NEUTRALS['dark'],
-                              elinewidth=.75,capsize=1.8,capthick=.75,zorder=8)
-    return {'bar':bar,'points':points,'errorbar':container,'mean':mean,
-            'error':error,'offsets':offsets}
+        if horizontal:
+            container=ax.errorbar(mean,position,xerr=error,fmt='none',
+                                  ecolor=NEUTRALS['dark'],elinewidth=.75,
+                                  capsize=1.8,capthick=.75,zorder=8)
+        else:
+            container=ax.errorbar(position,mean,yerr=error,fmt='none',
+                                  ecolor=NEUTRALS['dark'],elinewidth=.75,
+                                  capsize=1.8,capthick=.75,zorder=8)
+    legend_handle=mpl.patches.Patch(facecolor=FAMILIES[family]['main'],label=label) if label else None
+    return {'bar':bar,'errorbar':container,'mean':mean,'error':error,
+            'n':len(values),'legend_handle':legend_handle}
+
+
+def raw_data_bar(ax, position, values, family='primary1', width=.56,
+                 error_kind='sd', label=None, horizontal=False):
+    """Compatibility name for summary_bar; individual observations are not drawn."""
+    return summary_bar(ax,position,values,family,width,error_kind,label,horizontal)
 
 
 def gradient_peak(ax, x, y, family='primary1', baseline=0,

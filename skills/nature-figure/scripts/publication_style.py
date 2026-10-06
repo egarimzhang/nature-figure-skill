@@ -6,7 +6,7 @@ No installed-skill path dependency is permitted in a delivered figure script.
 import numpy as np
 import matplotlib as mpl
 from matplotlib import font_manager, transforms
-from matplotlib.ticker import AutoMinorLocator, NullLocator
+from matplotlib.ticker import AutoMinorLocator, FixedLocator, NullLocator
 from publication_colors import NEUTRALS, apply_color_style
 
 STYLE = {
@@ -45,7 +45,7 @@ def apply_publication_style():
 
 
 def style_axis(ax, *, categorical_x=False, categorical_y=False):
-    """Full frame; outward ticks on active axes; one midpoint minor on linear axes."""
+    """Full frame; set x minors after plotting with set_x_minor_ticks_from_data."""
     for spine in ax.spines.values():
         spine.set_visible(True)
         spine.set_color(NEUTRALS['dark'])
@@ -56,15 +56,42 @@ def style_axis(ax, *, categorical_x=False, categorical_y=False):
     ax.tick_params(axis='both', which='minor', direction='out', top=False, right=False,
                    width=STYLE['axis_width'],length=STYLE['minor_length'],
                    colors=NEUTRALS['dark'],labelbottom=False,labelleft=False,labelright=False,labeltop=False)
-    for axis, categorical, scale in ((ax.xaxis,categorical_x,ax.get_xscale()),
-                                      (ax.yaxis,categorical_y,ax.get_yscale())):
-        if categorical:
-            axis.set_minor_locator(NullLocator())
-        elif scale == 'linear':
-            axis.set_minor_locator(AutoMinorLocator(2))
-        # Log/symlog minor spacing requires a deliberate domain-specific choice.
-        axis.labelpad=STYLE['label_pad']
+    ax.xaxis.set_minor_locator(NullLocator())
+    ax._publication_categorical_x=bool(categorical_x)
+    if categorical_y:
+        ax.yaxis.set_minor_locator(NullLocator())
+    elif ax.get_yscale() == 'linear':
+        ax.yaxis.set_minor_locator(AutoMinorLocator(2))
+    # Log/symlog minor spacing requires a deliberate domain-specific choice.
+    ax.xaxis.labelpad=STYLE['label_pad']
+    ax.yaxis.labelpad=STYLE['label_pad']
     ax.set_facecolor('white')
+
+
+def set_x_minor_ticks_from_data(ax, data_x):
+    """Apply the observed-x rule after major ticks and data positions are finalized.
+
+    Pass unique experimental/category centres, not fit-curve samples or grid lines.
+    Categorical axes keep no minors; log/symlog axes need explicit tick design.
+    Returns whether midpoint minors were enabled.
+    """
+    if ax.get_xscale() != 'linear':
+        raise ValueError('Design minor ticks explicitly for a non-linear x axis.')
+    if getattr(ax,'_publication_categorical_x',False):
+        ax.xaxis.set_minor_locator(NullLocator())
+        return False
+    data=np.asarray(data_x,dtype=float).ravel()
+    if data.size == 0 or not np.isfinite(data).all():
+        raise ValueError('Expected finite observed x positions.')
+    major=np.asarray(ax.get_xticks(),dtype=float)
+    lo,hi=sorted(ax.get_xlim())
+    major=np.sort(np.unique(major[(major>=lo)&(major<=hi)]))
+    observed=np.sort(np.unique(data[(data>=lo)&(data<=hi)]))
+    one_to_one=(len(observed)==len(major) and
+                np.allclose(observed,major,rtol=1e-9,atol=1e-12))
+    midpoints=(major[:-1]+major[1:])/2
+    ax.xaxis.set_minor_locator(NullLocator() if one_to_one else FixedLocator(midpoints))
+    return not one_to_one
 
 
 def add_panel_label(ax, label, *, dx_mm=None, dy_mm=None):

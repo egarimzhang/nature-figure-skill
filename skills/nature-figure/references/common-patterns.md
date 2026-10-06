@@ -13,8 +13,8 @@ common row top/bottom edges. Adjust margins rather than allowing text collisions
 
 ```python
 right=make_twin_axis(ax)
-ax.set_ylabel('Selectivity / %')
-right.set_ylabel('Conversion / %')
+ax.set_ylabel('Selectivity (%)')
+right.set_ylabel('Conversion (%)')
 # Set all data, limits, ticks and legends before measuring.
 width_mm=fit_twin_to_width(ax,right,target_right_mm=178)
 ```

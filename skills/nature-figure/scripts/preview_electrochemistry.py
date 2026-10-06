@@ -77,7 +77,8 @@ def main(out,fixture_dir=None):
     ir=a.imshow(delta,origin='lower',extent=(1200,1900,.8,1.4),aspect='auto',
                 interpolation='nearest',cmap=diverging_cmap(),norm=mpl.colors.TwoSlopeNorm(vmin=-1,vcenter=0,vmax=1))
     a.set(xlim=(1900,1200),ylim=(.8,1.4),xticks=[1800,1600,1400,1200],yticks=[.8,1.,1.2,1.4],
-          xlabel=r'Wavenumber / cm$^{-1}$',ylabel=r'$E$ / V vs. RHE')
+          xlabel=r'Wavenumber (cm$^{-1}$)',ylabel=r'$E$ (V vs. RHE)')
+    set_x_minor_ticks_from_data(a,wn)
     a.text(.035,.97,'IR, ref. 0.8 V',transform=a.transAxes,va='top')
     a.annotate('Growth',xy=(1635,1.31),xytext=(1810,1.15),color=second['outline'],
                 arrowprops=dict(arrowstyle='->',color=second['outline'],lw=STYLE['axis_width']))
@@ -100,7 +101,8 @@ def main(out,fixture_dir=None):
     b.plot(energy[::13],raw[::13],ls='none',marker='o',ms=2.2,mfc='none',mec='#969696',mew=.55,zorder=5)
     b.axhline(base,color=NEUTRALS['mid'],ls=':',lw=STYLE['axis_width'])
     b.set(xlim=(293.2,281.8),ylim=(0,1.28),xticks=[292,290,288,286,284,282],yticks=[],
-          xlabel='Binding energy / eV',ylabel='Intensity / a.u.')
+          xlabel='Binding energy (eV)',ylabel='Intensity (a.u.)')
+    set_x_minor_ticks_from_data(b,energy)
     b.yaxis.set_minor_locator(NullLocator());b.text(.035,.97,'XPS',transform=b.transAxes,va='top')
     save_csv(data/'b_xps.csv',[energy,raw,total,*components],
              'binding_energy_eV,synthetic_observation,total,primary1,primary3,primary2')
@@ -115,7 +117,8 @@ def main(out,fixture_dir=None):
                    ms=STYLE['marker_size'],mew=STYLE['marker_edge'],mec=color,
                    mfc=color if measure==1 else 'white',ls='-' if measure==1 else '--',label=f'{chr(65+k)}{measure}')
     c.set(xlim=(180,820),ylim=(0,100),xticks=[300,400,500,600,700],yticks=[0,25,50,75,100],
-          xlabel=r'$T$ / K',ylabel='Response / %')
+          xlabel=r'$T$ (K)',ylabel='Response (%)')
+    set_x_minor_ticks_from_data(c,paired['temperature_K'])
     c.legend(loc='lower center',bbox_to_anchor=(.5,1.03),ncol=4,frameon=False,
              handlelength=1.05,handletextpad=.3,columnspacing=.7,borderaxespad=0,borderpad=.1)
 
@@ -129,21 +132,27 @@ def main(out,fixture_dir=None):
     d.plot(cvx,cvy,color=first['outline'],zorder=3)
     d.axhline(0,color=NEUTRALS['light'],lw=STYLE['axis_width'],zorder=0)
     d.set(xlim=(-.25,.70),ylim=(-1.35,1.85),xticks=[-.2,0,.2,.4,.6],yticks=[-1,0,1],
-          xlabel=r'$E$ / V vs. RHE',ylabel=r'$j$ / mA cm$^{-2}$')
+          xlabel=r'$E$ (V vs. RHE)',ylabel=r'$j$ (mA cm$^{-2}$)')
+    set_x_minor_ticks_from_data(d,E)
     d.text(.04,.96,'Cycle 1',transform=d.transAxes,va='top')
     save_csv(data/'d_single_cv.csv',[cvx,cvy,np.r_[np.ones(len(E)),np.full(len(E),-1)]],
              'potential_V,schematic_current_density_mA_cm2,scan_direction')
 
-    # e: grouped raw-data bars using the default scheme and explicit sample SD.
+    # e: grouped replicate-summary bars using the default scheme and sample SD.
     temps=np.array([300.,500.,700.]);barw=48.;shift=28.
     raw_first=np.array([[58,62,61],[69,73,71],[76,81,79]],float)
     raw_second=np.array([[43,47,45],[57,62,60],[68,73,71]],float)
+    legend_handles=[]
     for family,raw,xshift,label in [('primary1',raw_first,-shift,'A'),('primary2',raw_second,shift,'B')]:
         for k,(x,values) in enumerate(zip(temps,raw)):
-            raw_data_bar(e,x+xshift,values,family,width=barw,error_kind='sd',label=label if k==0 else None)
-    e.set(ylim=(0,100),xticks=temps,yticks=[0,25,50,75,100],xlabel=r'$T$ / K',ylabel='Response / %')
+            result=summary_bar(e,x+xshift,values,family,width=barw,error_kind='sd',
+                               label=label if k==0 else None)
+            if k==0: legend_handles.append(result['legend_handle'])
+    e.set(ylim=(0,100),xticks=temps,yticks=[0,25,50,75,100],xlabel=r'$T$ (K)',ylabel='Response (%)')
     set_bar_padding(e,np.r_[temps-shift,temps+shift],np.full(6,barw))
-    e.legend(loc='upper left',ncol=2,handlelength=1.2,handletextpad=.4,columnspacing=1.,borderpad=.2)
+    set_x_minor_ticks_from_data(e,np.r_[temps-shift,temps+shift])
+    e.legend(handles=legend_handles,loc='upper left',ncol=2,handlelength=1.2,
+             handletextpad=.4,columnspacing=1.,borderpad=.2)
     save_csv(data/'e_grouped_raw_bars.csv',[temps,*raw_first.T,*raw_second.T],
              'temperature_K,A_rep1,A_rep2,A_rep3,B_rep1,B_rep2,B_rep3')
 
@@ -158,7 +167,8 @@ def main(out,fixture_dir=None):
         f.text(-5.7,offset+1.55,chr(65+k),color=FAMILIES[family]['outline'])
     f.axvline(0,color=NEUTRALS['mid'],ls='--',lw=STYLE['axis_width'])
     f.set(xlim=(-6,3),ylim=(-.10,4.2),xticks=[-6,-4,-2,0,2],yticks=[],
-          xlabel=r'$(E-E_{\mathrm{F}})$ / eV',ylabel='PDOS / a.u.')
+          xlabel=r'$(E-E_{\mathrm{F}})$ (eV)',ylabel='PDOS (a.u.)')
+    set_x_minor_ticks_from_data(f,erel)
     f.yaxis.set_minor_locator(NullLocator())
     save_csv(data/'f_pdos.csv',[erel,pdos[0],pdos[1],pdos[0],pdos[1]+2.25],
              'energy_relative_EF_eV,primary1_raw,primary2_raw,primary1_display,primary2_display')
@@ -179,7 +189,7 @@ def main(out,fixture_dir=None):
     g.annotate('',xy=(3.55,1.2),xytext=(3.55,.18),arrowprops=dict(arrowstyle='<->',color=second['outline'],lw=STYLE['axis_width']))
     g.text(3.72,.65,'1.02 eV',color=second['outline'])
     g.set(xlim=(-.55,6.6),ylim=(-.5,1.65),xticks=[0,2,4,6],xticklabels=['R','I1','I2','P'],
-          yticks=[0,.5,1.,1.5],xlabel='Reaction coordinate',ylabel=r'$\Delta G$ / eV')
+          yticks=[0,.5,1.,1.5],xlabel='Reaction coordinate',ylabel=r'$\Delta G$ (eV)')
     save_csv(data/'g_energy_states.csv',[np.arange(4),stable],'state_index,free_energy_eV')
     save_csv(data/'g_transition_states.csv',[np.arange(1,4),ts,ts-stable[:-1]],'step,transition_energy_eV,forward_barrier_eV')
     save_csv(data/'g_path_curve.csv',[path_x,path_y],'display_coordinate,illustrative_energy_eV')
@@ -189,9 +199,10 @@ def main(out,fixture_dir=None):
     xim=h.imshow(xrd['globally_normalized_intensity'],extent=(20,60,350,750),origin='lower',
                  aspect='auto',interpolation='nearest',cmap=sequential_cmap('primary1'),vmin=0,vmax=1)
     h.set(xlim=(20,60),ylim=(350,750),xticks=[20,30,40,50,60],yticks=[350,450,550,650,750],
-          xlabel=r'$2\theta$ / °',ylabel=r'$T$ / K')
+          xlabel=r'$2\theta$ (°)',ylabel=r'$T$ (K)')
+    set_x_minor_ticks_from_data(h,[20,60])
     h.text(.035,.97,'I → II',transform=h.transAxes,va='top')
-    configure_colorbar(fig,xim,xrd_cax,r'$I$ / a.u.',[0,1],['0','1'])
+    configure_colorbar(fig,xim,xrd_cax,r'$I$ (a.u.)',[0,1],['0','1'])
 
     # i: synthetic series Rs + parallel RC + Warburg, not a fit to observations.
     frequency=np.logspace(4,-2,85);omega=2*np.pi*frequency;zcurves=[]
@@ -201,7 +212,8 @@ def main(out,fixture_dir=None):
         i.plot(z.real,-z.imag,color=FAMILIES[family]['main'],label=chr(65+k),marker=['o','s'][k],
                markevery=7,ms=STYLE['marker_size'],mew=STYLE['marker_edge'],mfc='white',mec=FAMILIES[family]['main'])
     i.set(xlim=(0,195),ylim=(0,150),xticks=[0,50,100,150],yticks=[0,50,100,150],
-          xlabel=r"$Z^{\prime}$ / $\Omega$",ylabel=r"$-Z^{\prime\prime}$ / $\Omega$")
+          xlabel=r"$Z^{\prime}$ ($\Omega$)",ylabel=r"$-Z^{\prime\prime}$ ($\Omega$)")
+    set_x_minor_ticks_from_data(i,np.r_[zcurves[0].real,zcurves[1].real])
     # (195/150)==1.3, so equal impedance scales retain the ordinary 1.3:1 frame.
     i.set_aspect('equal',adjustable='box');i.legend(loc='upper left',ncol=2,handlelength=1.4,columnspacing=.8)
     i.text(.06,.71,'High → low f',transform=i.transAxes)
@@ -243,7 +255,7 @@ def main(out,fixture_dir=None):
     assert abs(ir_cax.bbox.x1-d.bbox.x1)<.01
     assert abs(xrd_cax.bbox.x1-e.bbox.x1)<.01
     assert len(c.lines)==4 and all(line.get_markersize()==4.5 for line in c.lines)
-    assert len(e.patches)==6 and sum(len(line.get_xdata()) for line in e.lines if line.get_marker()=='o')==18
+    assert len(e.patches)==6 and not any(line.get_marker()=='o' for line in e.lines)
     assert cvx[0]==cvx[-1] and cvy[0]==cvy[-1]
     assert np.allclose(delta[0],0) and delta.min()<0<delta.max()
     assert all(np.all(v>=0) for v in pdos)
@@ -254,7 +266,7 @@ def main(out,fixture_dir=None):
     fig.savefig(stem.with_suffix('.png'),dpi=300,bbox_inches=None)
     fig.savefig(stem.with_suffix('.tiff'),dpi=600,bbox_inches=None,pil_kwargs={'compression':'tiff_lzw'})
     svg=ET.parse(stem.with_suffix('.svg')).getroot();ns={'s':'http://www.w3.org/2000/svg'}
-    assert len(svg.findall('.//s:linearGradient',ns))==3
+    assert len(svg.findall('.//s:linearGradient',ns))==9
     assert len(svg.findall('.//s:image',ns))==2
     fonts=[el.get('style','') for el in svg.iter() if 'font-family' in el.get('style','')]
     assert fonts and all("'Arial'" in style for style in fonts)
@@ -272,11 +284,11 @@ def main(out,fixture_dir=None):
         'Both colourbar right borders align to ordinary 1.3:1 frames (d/e).',
         'IR difference is zero at reference potential; zero-centred signed scale.',
         'XPS uses Primary 1/2 plus first on-request Primary 3 yellow.',
-        'Four paired curves, one closed CV loop, and six grouped raw-data bars.',
+        'Four paired curves, one closed CV loop, and six grouped mean/SD gradient bars.',
         'Positive PDOS retained with documented display offsets and Fermi reference.',
         'Reaction energies and designated step exported; no fitted kinetic claim.',
         'Nyquist uses equal physical impedance scales and explicit analytic mock parameters.',
-        'Fixed typography/geometry, three native SVG gradients and two intentional raster maps.']},indent=2)+'\n')
+        'Fixed typography/geometry, nine native SVG gradients and two intentional raster maps.']},indent=2)+'\n')
     plt.close(fig);print(json.dumps({'passed':True,'canvas_mm':[fw,fh],'ir_colorbar_right_mm':params['ir_colorbar_right_mm'],'xrd_colorbar_right_mm':params['xrd_colorbar_right_mm']}))
 
 

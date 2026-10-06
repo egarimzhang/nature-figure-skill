@@ -5,16 +5,15 @@ first. User-requested chart types and panels are preserved.
 
 ## Bars, stacks, errors
 
-Bars retain zero; bounded percentages normally 0–100. Use light faces and family
-outline borders for ordinary bars, solid levels for stacks. About 50–60% category spacing for
+Bars retain zero; bounded percentages normally 0–100. Use a main-at-top, mid-at-bottom
+gradient without an outline for ordinary bars; stacks retain solid component levels. About 50–60% category spacing for
 bar/group width; group gaps distinguish categories. Negative/horizontal gradients get
 deeper away from baseline. Compute side margins from actual outer bar/group edges; see
 layout-contract.md. Optional single-family three/four-layer and two-family six-layer recipes
 are in color-contract.md. Value labels are opt-in, not mandatory for every bar. Never
 conceal cropped bars or error endpoints.
 
-Errors: stroke/cap 0.75 pt, capsize 1.8 pt, alpha 1. Neutral axis-grey on bars and topmost; family outline on multi-series curves where overlaps need identity. Error definitions and n are supplied or
-explicitly agreed; no automatic SD/SEM substitution. A stacked boundary's uncertainty
+Errors: stroke/cap 0.75 pt, capsize 1.8 pt, alpha 1. Neutral axis-grey on bars and topmost; family outline on multi-series curves where overlaps need identity. Repeated bar observations show only their mean and sample SD, with n stated and raw values retained in source data. Other error definitions require an explicit request. A stacked boundary's uncertainty
 is uncertainty of a SUM, including covariance. Use matched replicate cumulative sums,
 provided cumulative intervals or a justified covariance model. Never add segment SDs.
 In style tests, disclose simulated replicates and demonstrate the calculation explicitly.
@@ -43,7 +42,7 @@ preview's 6.7 min peak or 1.18 offset. Do not invent peak identity or presence/a
 
 For two specified metrics, a single-family bar series and a different single-family
 point-line series are available. Selectivity/conversion are bounded percentages unless
-otherwise specified. Use main for the line, solid light faces/outline borders for bars, neutral axes,
+otherwise specified. Use main for the line, main-to-mid gradients for bars, neutral axes,
 clear metric/axis mapping, and matching 4.5 pt legend markers. Keep left/height and fit
 right-axis text; never propagate this shortened frame as the column reference.
 

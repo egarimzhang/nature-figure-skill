@@ -14,24 +14,25 @@ a statement of universal journal compliance; verify a specified submission's off
 - Point-line and legend markers 4.5 pt, edges 0.6 pt; dense spectral raw points are separate.
 - Bar/group outer edges retain side margins; no arbitrary hard-coded temperature limits.
   Multirow gaps start at 12 mm including labels; increase only for actual content.
-- One unlabelled short midpoint minor tick per major interval on continuous linear axes;
-  no invented categorical midpoint ticks. Units use spaced slash; physical symbols italic.
+- After major x ticks are set, no x minors when distinct data positions correspond one-to-one
+  with them; otherwise one unlabelled short midpoint minor per interval on continuous
+  linear x axes. No invented categorical midpoint ticks. Units use parentheses; physical symbols italic.
 - Panel labels anchored to left/top frame at physical offsets and move with the axes.
   Row top/bottom alignment survives twin/colourbar fitting. A column has an ordinary or
   nominal right boundary; narrowed twins are never subsequent alignment references.
   Colourbar RIGHT BORDER matches that standard boundary, labels outside. Check individual
   artist boxes in shared gutters: union boxes may overlap only in genuinely empty areas.
   Actual labels/marks must not collide or escape canvas. Check near adjacent panel letters.
-- Exact approved anchors, main curves, main/mid paired curves, light/outline ordinary bars,
+- Exact approved anchors, main curves, main/mid paired curves, main-to-mid ordinary bar gradients,
   outline peaks. Three/four stacks use literal main/mid/light or outline/main/mid/light.
   Two equal active primary categories; no silent on-request extension. When authorized, prefer
   the active scheme's on-request order; keep Primary 3/4 mutually exclusive. Primary keys are primary1/primary2/primary3/primary4, not auxiliary blue. Do not auto-create auxiliary four-level ladders.
   Check requested layer counts and do not add errors to a no-error stack.
-- Ordinary bars use solid light/outline styling; peak gradients remain readable/translucent. Native SVG gradient stops;
+- Ordinary bars use opaque top-main/bottom-mid gradients without outlines; peak gradients remain readable/translucent. Native SVG gradient stops;
   intentional raster intensity maps disclosed, with editable labels and matrix data.
 - Plot limits include all observations/errors and meaningful zero baselines; bounded
   percentages do not silently clip overflow. Breaks/normalization/offsets are explicit.
-- Raw-data bars use true y values, deterministic central-40% x positions, 3.0 pt light-face/main-edge points and topmost neutral errors. Point-line errors use family outline.
+- Bars with replicates show mean and sample SD only, with no individual dots; raw observations remain in source data. Neutral bar errors sit topmost. Point-line errors use family outline.
 - Non-peak closed shapes use light faces/outline boundaries; peak-shaped spectral components retain gradients.
 - Errors have correct definition/n and asymmetric form when provided. Stacked errors are
   derived from cumulative replicate sums or justified covariance, not summed SDs. Check

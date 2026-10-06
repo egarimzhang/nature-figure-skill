@@ -27,7 +27,7 @@ python scripts/preview_electrochemistry.py OUTPUT_DIRECTORY
 
 a: potential-dependent signed IR reference difference and aligned colourbar; b: three-colour
 XPS (Primary 3 explicitly requested); c: two paired objects; d: single closed CV loop with
-outline/light fill; e: Primary 1/2 grouped raw-data bars with SD; f: vertically offset two-family
+outline/light fill; e: Primary 1/2 grouped gradient bars showing replicate means and SD without raw dots; f: vertically offset two-family
 PDOS with outline/light fill; g: illustrative reaction barriers with a designated step in the second active primary; h: temperature-XRD map with aligned colourbar; i: two Nyquist model curves.
 Scientific conventions and mock model parameters are exported beside the figure. No
 surface-phase identification, spin assignment or experimental rate-control inference

@@ -70,7 +70,7 @@ def main(out):
            mec='#969696',mew=.55,zorder=5)
     a.axhline(baseline,color=NEUTRALS['mid'],lw=STYLE['axis_width'],ls=':')
     a.set(xlim=(293.6,282.1),ylim=(0,1.34),xticks=[292,290,288,286,284],
-          yticks=[0,.4,.8,1.2],xlabel='Binding energy / eV',ylabel='Intensity / a.u.')
+          yticks=[0,.4,.8,1.2],xlabel='Binding energy (eV)',ylabel='Intensity (a.u.)')
     a.text(.03,.97,'XPS',transform=a.transAxes,va='top')
     np.savetxt(data/'a_xps.csv',np.column_stack([energy,raw,total,*components]),delimiter=',',
                header='binding_energy_eV,synthetic_observation,total,'+','.join(v[0] for v in PREVIEW['xps_components']),comments='')
@@ -86,7 +86,7 @@ def main(out):
                    mfc=color if measure==1 else 'white',ls='-' if measure==1 else '--',
                    label=f'{chr(65+j)}{measure}')
     b.set(xlim=(180,820),ylim=(0,100),xticks=[300,400,500,600,700],
-          yticks=[0,25,50,75,100],xlabel=r'$T$ / K',ylabel='Response / %')
+          yticks=[0,25,50,75,100],xlabel=r'$T$ (K)',ylabel='Response (%)')
     b.legend(loc='lower center',bbox_to_anchor=(.5,1.03),ncol=4,frameon=False,
              handlelength=1.05,handletextpad=.3,columnspacing=.7,borderaxespad=0,borderpad=.1)
 
@@ -103,7 +103,7 @@ def main(out):
         for x,y,bottom in zip(temperatures,yy,base):
             c.text(x,bottom+y/2,f'{y:g}',ha='center',va='center',color=ink,zorder=4)
         base+=yy
-    c.set(xticks=[300,500,700],yticks=[0,25,50,75,100],xlabel=r'$T$ / K',ylabel='Fraction / %')
+    c.set(xticks=[300,500,700],yticks=[0,25,50,75,100],xlabel=r'$T$ (K)',ylabel='Fraction (%)')
     set_percentage_axis(c,values=base);set_bar_padding(c,temperatures,PREVIEW['bar_width_data'])
     c.legend(loc='upper left',ncol=4,frameon=False,handlelength=.9,
              handletextpad=.3,columnspacing=.6,borderpad=.2)
@@ -119,7 +119,7 @@ def main(out):
             d.plot(rows['raman_shift_cm1'],rows['display_signal'],color=color)
     d.axhline(PREVIEW['raman_separator_y'],color=NEUTRALS['mid'],lw=STYLE['axis_width'])
     d.set(xlim=(180,820),ylim=(0,8.2),xticks=[200,400,600,800],yticks=[],
-          xlabel=r'Raman shift / cm$^{-1}$',ylabel='Intensity / a.u.')
+          xlabel=r'Raman shift (cm$^{-1}$)',ylabel='Intensity (a.u.)')
     d.yaxis.set_minor_locator(NullLocator())
     d.text(205,3.78,'A',va='top',color=FAMILIES['primary1']['outline'])
     d.text(205,7.7,'B',color=FAMILIES['primary2']['outline'])

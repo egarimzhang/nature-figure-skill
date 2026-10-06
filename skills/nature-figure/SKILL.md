@@ -35,8 +35,14 @@ Only a specified submission target warrants checking its current official requir
   46 × 35.38 mm (1.3:1). Axis text 8 pt, annotations/legends 7.5 pt, panel letters
   12 pt; all Arial, with Arial Italic for physical symbols. No silent font substitution.
 - Full frame, dark-grey axes/text, 0.75 pt axes, 1.125 pt curves, 4.5 pt point-line
-  markers. Multirow frame gap starts at 12 mm; bar margins use outer edges. One short unnumbered
-  minor tick between major ticks on continuous linear axes. Units use ` / `.
+  markers. Multirow frame gap starts at 12 mm; bar margins use outer edges. Axis titles
+  write quantities followed by parenthesized units, such as `Current density (mA cm$^{-2}$)`.
+  After setting major x ticks, omit x minor ticks when the distinct observed x positions
+  correspond one-to-one with major ticks; otherwise use one unnumbered midpoint minor
+  tick per interval. See layout-contract.md for log/categorical axes.
+- Preserve the 8 pt axis-title size first. For a long title, try moving it within the
+  panel envelope, wrapping it, or shortening tick numbers with a multiplier; shrink
+  the title only if these do not yield a balanced layout. Keep plot frames aligned.
 - Anchor panel letters to the plot's left/top frame with physical offsets, never
   to axis-title bounds. Ordinary grids align left axes; mixed layouts may adjust
   horizontal positions and widths for twins/colourbars while retaining row top/bottom
@@ -47,14 +53,15 @@ Only a specified submission target warrants checking its current official requir
   1/4 orange. Primary 3 and 4 are mutually exclusive. Use exact light/mid/main/outline
   anchors and the scheme-specific on-request order in color-contract.md. Main is the
   curve default; paired measurements use main/mid. Non-peak closed shapes use light
-  faces and outline boundaries. Ordinary bars use solid light faces/outline borders;
-  fitted peak-shaped spectra retain stronger translucent gradients. Three-layer stacks
+  faces and outline boundaries. Ordinary non-stacked bars use an opaque gradient from
+  main at the top to mid at the bottom, without an outline; repeated observations appear
+  only as their mean and defined SD, not individual dots. Fitted peak-shaped spectra
+  retain their separate translucent gradients. Three-layer stacks
   use main/mid/light; four-layer stacks add outline below main. Cyan/blue/violet remain
   one-anchor auxiliaries. Never add a colour solely because more data rows exist.
-- Raw-data bars use 3.0 pt light-face/main-edge points distributed deterministically
-  through the central 40% of bar width. Their neutral dark error bars are topmost.
-  Point-line error bars use family outline where overlap needs series identity. Keep
-  readable grey references and explicit uncertainty semantics.
+- Bar error bars are neutral dark and topmost. Point-line error bars use family outline
+  where overlap needs series identity. Keep readable grey references and explicit
+  uncertainty semantics; do not invent SD for observations without replicates.
 
 Python implementations are [publication_colors.py](scripts/publication_colors.py) and
 [publication_style.py](scripts/publication_style.py). Read [api.md](references/api.md)

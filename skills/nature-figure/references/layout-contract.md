@@ -14,7 +14,7 @@ height to this single-row example. Multirow frame-to-frame gaps start at 12 mm, 
 space for axis titles and legends, not 12 mm of extra blank space after all text.
 The approved 3×3 reference is 180 × 153.65 mm: bottom 10.5 mm, top 13 mm, three
 35.38 mm frames and two 12 mm gaps. Adjust margins/gaps for actual text without
-shrinking fonts. Do not hard-code that total height for other figures.
+shrinking fonts as the first response. Do not hard-code that total height for other figures.
 
 | Element | Final-size default |
 |---|---|
@@ -41,17 +41,31 @@ Do not confuse Matplotlib `markersize` (pt) with scatter `s` (pt squared).
 ## Frames, ticks and labels
 
 Ordinary data plots show all four frame sides. Left/bottom carry ticks; top/right are
-plain unless they are an active additional axis. One unnumbered midpoint minor tick
-per adjacent major interval on continuous linear axes. Do not create midpoint ticks
-on categorical axes; log/symlog ticks need explicit appropriate placement. Aim for
+plain unless they are an active additional axis. Set and label major x ticks by the
+usual scale rules before deciding on x minors. If distinct observed x positions and
+major x ticks correspond one-to-one, omit x minor ticks. If any observed x position
+falls between major ticks, draw one short unnumbered midpoint minor tick per adjacent
+major interval. For continuous linear x axes with extra major ticks not paired to data,
+use the same midpoint rule. Do not create midpoint ticks on categorical axes;
+log/symlog ticks need explicit scientifically appropriate placement. The y-axis retains
+one unnumbered midpoint minor tick per adjacent major interval on continuous linear scales.
+Aim for
 roughly 4–6 readable major ticks, consistent precision, no unnecessary decimals or
 opaque automatic numeric offsets. Do not force three-digit numbers on future plots:
 that was only a spacing stress test. White background; no grid by default.
 
-Axis labels use spaced ` / ` instead of unit parentheses. Physical symbols italic,
-units/chemical formulas/descriptive words upright: `$E$ / V vs. RHE`, `Binding energy / eV`,
-`Conversion / %`. Ordinary text is dark grey; series-linked labels may use their colours.
+Axis titles use quantity followed by parenthesized units, with no quantity/unit slash.
+Physical symbols italic; units/chemical formulas/descriptive words upright:
+`$E$ (V vs. RHE)`, `Binding energy (eV)`, `Conversion (%)`. Ordinary text is dark grey;
+series-linked labels may use their colours.
 Keep titles near tick labels using the stated pad, not a fixed far-left figure coordinate.
+For a long axis title, preserve the 8 pt default first. Try moving its position within
+the decorated panel, wrapping it, or using a clear multiplier above the axis to shorten
+tick numbers. A vertical title may move downward no farther than the x-axis title's
+height; avoid upward movement that can cover the panel letter. A horizontal title may
+move left or right without crossing the y-axis title or right frame. Keep subplot frames
+aligned. If these changes still cannot produce a balanced layout, reduce title size
+modestly and inspect again at final dimensions.
 
 ## Limits and scientific scale
 
@@ -116,7 +130,7 @@ These coordinates demonstrate the rule, not universal absolute positions.
 Check adjacent panel letters, colourbar titles/ticks and axis titles at their actual
 positions. Union bounding boxes can overlap in empty corners without real collisions;
 inspect the individual artists as well. Remove needless trailing zeros (e.g. 0, 0.5, 1)
-when appropriate, but do not reduce scientific precision or font size for layout.
+when appropriate, but do not reduce scientific precision for layout.
 
 Legends are frameless and without opaque boxes; their ordering matches the data.
 Use real empty space, outside placement or more columns instead of shrinking fonts.

@@ -10,8 +10,13 @@ of truth; do not paste styles from historical atlases.
 - `apply_publication_style()`: verify Arial regular/italic; set dark-grey complete-frame
   defaults, main curve colours and editable exports. Do not call old conflicting styles afterward.
 - `style_axis(ax, categorical_x=False, categorical_y=False)`: four spines, correct ticks,
-  midpoint linear minor ticks and pads. Call after creating the axis; specify categorical
-  axes deliberately. Labels use ` / ` and italic physical symbols.
+  y-axis midpoint linear minor ticks and pads. Call after creating the axis; specify categorical
+  axes deliberately. X minors begin disabled until observed positions are known.
+- `set_x_minor_ticks_from_data(ax, data_x)`: call after major x ticks and limits are final,
+  passing distinct observed x positions rather than fit/grid samples. It omits x minors
+  for one-to-one data/major-tick matches and otherwise enables one unnumbered midpoint
+  per linear interval. Design log/symlog x minors explicitly. Labels use parenthesized
+  units and italic physical symbols.
 - `add_panel_label(ax, label, dx_mm=None, dy_mm=None)`: anchors to axes left/top with
   physical offsets. It follows later layout changes; no axis-title-bound anchoring.
 - `make_twin_axis(ax)`: one visible copy of each frame edge; right ticks and grey labels.
@@ -37,7 +42,9 @@ apply_publication_style()
 fig=plt.figure(figsize=(60/25.4,54.884615/25.4))
 ax=fig.add_axes([12/60,12.5/54.884615,46/60,(46/1.3)/54.884615])
 style_axis(ax)
-ax.set(xlabel=r'$T$ / K',ylabel='Conversion / %')
+ax.set(xlabel=r'$T$ (K)',ylabel='Conversion (%)')
+ax.set_xticks([300,500,700])
+set_x_minor_ticks_from_data(ax,[300,500,700])
 add_panel_label(ax,'a')
 # Plot real observations and supplied/defined errors here; set limits to include them.
 save_editable_svg(fig,'figure.svg')
@@ -61,11 +68,15 @@ fig.savefig('figure.pdf',bbox_inches=None)
 - `blend(color, target='#FFFFFF', amount=...)`: RGB styling tint, not a data scale.
 - `closed_shape_style(family='primary1',alpha=.65)`: light face/outline boundary for
   non-peak closed areas.
-- `gradient_bar(..., gradient=False, ...)`: ordinary default is a solid light face with
-  outline; gradient is explicit opt-in.
-- `raw_point_offsets(count,width,central_fraction=.40)`: deterministic central placement.
-- `raw_data_bar(ax,position,values,family,width,error_kind=None,label=None)`: mean bar,
-  light-face/main-edge 3 pt raw points and optional explicit SD/SEM neutral top error.
+- `gradient_bar(..., gradient=True, ...)`: ordinary default is an opaque mid-at-baseline,
+  main-at-outer-end gradient without an outline. For positive bars this is top-main/bottom-mid.
+- `summary_bar(ax,position,values,family,width,error_kind='sd',label=None)`: mean bar
+  with sample SD by default, no individual dots, and a neutral top error bar. Retain
+  raw observations in source data. For a single supplied summary, use `error_kind=None`
+  or `gradient_bar` directly. The return value includes an optional solid-colour legend
+  proxy. `raw_data_bar` remains a compatibility alias but also omits raw dots.
+- `raw_point_offsets(...)`: explicit opt-in helper for a user-requested raw-point overlay;
+  it is not used by default bars.
 - `gradient_peak(ax,x,y,family='primary1',baseline=0,alpha_base=.40,alpha_tip=.82)`:
   monotonic x, finite positive curve above constant baseline. Draw an outline separately.
 - `sequential_cmap(family='primary1')`, `diverging_cmap(scheme=...)`: numeric scales.
