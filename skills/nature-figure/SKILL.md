@@ -35,7 +35,8 @@ Only a specified submission target warrants checking its current official requir
   46 × 35.38 mm (1.3:1). Axis text 8 pt, annotations/legends 7.5 pt, panel letters
   12 pt; all Arial, with Arial Italic for physical symbols. No silent font substitution.
 - Full frame, dark-grey axes/text, 0.75 pt axes, 1.125 pt curves, 4.5 pt point-line
-  markers. Multirow frame gap starts at 12 mm; bar margins use outer edges. Axis titles
+  markers. Row and column frame-to-frame gaps start at 14 mm, including labels and legends;
+  bar margins use outer edges. Axis titles
   write quantities followed by parenthesized units, such as `Current density (mA cm$^{-2}$)`.
   After setting major x ticks, omit x minor ticks when the distinct observed x positions
   correspond one-to-one with major ticks; otherwise use one unnumbered midpoint minor

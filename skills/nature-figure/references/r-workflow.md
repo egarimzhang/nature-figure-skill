@@ -25,8 +25,9 @@ linear major interval at 1.5 pt, with no grid. Do not silently omit required tic
 
 Grid physical units or measured grob bounds provide fixed panel dimensions and letter
 offsets. Do not use auto-tagging that anchors to varying title bounds. Solve twin/colourbar
-occupied widths while keeping row top/bottom alignment. Start multirow frame gaps at
-12 mm including labels. A narrowed twin is not a column reference: align a colourbar's
+occupied widths while keeping row top/bottom alignment. Start row and column
+frame-to-frame gaps at 14 mm including labels and legends. A narrowed twin is not a
+column reference: align a colourbar's
 right border to the ordinary unshortened frame or nominal grid boundary. Labels sit
 outside; check actual artist/grob bounds. Default colourbar width/gap/tick pad are
 1.8 mm / 2 mm / 3 pt. Intrinsic image aspect is preserved. Derive bar side margins from

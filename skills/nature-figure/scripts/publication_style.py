@@ -17,7 +17,8 @@ STYLE = {
     'error_width': 0.75, 'error_capsize': 1.8,
     'marker_size': 4.5, 'marker_edge': 0.6,
     'figure_width_mm': 180.0, 'plot_width_mm': 46.0, 'aspect': 1.3,
-    'row_frame_gap_mm': 12.0, 'multirow_bottom_mm': 10.5, 'multirow_top_mm': 13.0,
+    'row_frame_gap_mm': 14.0, 'column_frame_gap_mm': 14.0,
+    'multirow_bottom_mm': 10.5, 'multirow_top_mm': 13.0,
     'bar_edge_fraction': 0.10546875,  # accepted three-bar reference; editable per layout
     'colourbar_width_mm': 1.8, 'colourbar_gap_mm': 2.0, 'colourbar_tick_pad': 3.0,
     'cell_pitch_mm': 60.0, 'panel_dx_mm': -9.5, 'panel_dy_mm': 0.4,

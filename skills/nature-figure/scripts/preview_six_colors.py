@@ -9,9 +9,9 @@ from publication_colors import *
 from publication_style import *
 
 PREVIEW = {
-    'canvas_width_mm':120., 'plot_width_mm':46., 'aspect':1.3,
-    'left_mm':12., 'column_pitch_mm':60., 'bottom_mm':12.5, 'top_mm':7.,
-    'row_frame_gap_mm':12., 'bar_width_data':105.,
+    'canvas_width_mm':120., 'plot_width_mm':STYLE['plot_width_mm'], 'aspect':STYLE['aspect'],
+    'left_mm':12., 'column_pitch_mm':STYLE['cell_pitch_mm'], 'bottom_mm':12.5, 'top_mm':7.,
+    'row_frame_gap_mm':STYLE['row_frame_gap_mm'], 'bar_width_data':105.,
     'xps_baseline':.035, 'xps_rng_seed':817106,
     'xps_components':[
         ['primary1',292.0,.43,.42], ['cyan',290.3,.55,.55],
@@ -180,7 +180,7 @@ def main(out):
         'Four main/mid point-lines, 4.5 pt markers; source values unchanged.',
         'Three bars with four literal layers and 12 numeric labels; no error bars.',
         'Twelve Raman spectra plus one grey separator, raw values and offsets preserved.',
-        '46 mm frames at 1.3:1, 12 mm row gap, Arial typography and physical panel anchors.',
+        '46 mm frames at 1.3:1, 14 mm row and column gaps, Arial typography and physical panel anchors.',
         'Canvas bounds and adjacent panel envelopes do not collide.']},indent=2)+'\n')
     print(json.dumps({'passed':True,'canvas_mm':[fw,fh],'auxiliary_outlines':params['auxiliary_outline']}))
 

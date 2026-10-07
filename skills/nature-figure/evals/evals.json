@@ -84,7 +84,7 @@
     {
       "id": "paired-markers-versus-dense-spectra",
       "prompt": "Use Python for a paired point-line plot plus a densely sampled XPS fit, arranged in three compact rows.",
-      "expected_output": "Point-line and corresponding legend markers are 4.5 pt with 0.6 pt edges; dense XPS raw markers are chosen separately. Row-frame gaps start at 12 mm including labels, not additional whitespace. Keep established fonts/strokes and never modify real trends for separation.",
+      "expected_output": "Point-line and corresponding legend markers are 4.5 pt with 0.6 pt edges; dense XPS raw markers are chosen separately. Row and column frame gaps start at 14 mm including labels and legends, not additional whitespace. Keep established fonts/strokes and never modify real trends for separation.",
       "files": []
     },
     {

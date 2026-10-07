@@ -8,12 +8,13 @@ These user-confirmed defaults replace earlier 75 mm plot / 11 pt text / 20 pt la
 Numerical Python source: `../scripts/publication_style.py`, dictionary `STYLE`.
 The validated 1×3 reference canvas is 180 × 54.88 mm. Each 60 mm cell has its left
 axis at 12 mm from the cell edge, 46 mm plot width and 46/1.3 mm height. Bottom
-margin 12.5 mm, top margin 7 mm. The 14 mm frame-to-frame gap includes the next
-y-axis labels. Multirow canvases add appropriate row gaps; do not fix every composite's
-height to this single-row example. Multirow frame-to-frame gaps start at 12 mm, INCLUDING
-space for axis titles and legends, not 12 mm of extra blank space after all text.
-The approved 3×3 reference is 180 × 153.65 mm: bottom 10.5 mm, top 13 mm, three
-35.38 mm frames and two 12 mm gaps. Adjust margins/gaps for actual text without
+margin 12.5 mm, top margin 7 mm. The column frame-to-frame gap is 60 − 46 = 14 mm
+and includes the next y-axis labels. Multirow canvases add appropriate row gaps; do
+not fix every composite's height to this single-row example. Row frame-to-frame gaps
+also start at 14 mm, INCLUDING space for axis titles and legends. These are frame-edge
+distances, not 14 mm of extra blank space after all text.
+The approved 3×3 reference is 180 × 157.65 mm: bottom 10.5 mm, top 13 mm, three
+35.38 mm frames and two 14 mm row gaps. Adjust margins/gaps for actual text without
 shrinking fonts as the first response. Do not hard-code that total height for other figures.
 
 | Element | Final-size default |
@@ -29,6 +30,7 @@ shrinking fonts as the first response. Do not hard-code that total height for ot
 | Error line / cap stroke | 0.75 / 0.75 pt |
 | Matplotlib error capsize / alpha | 1.8 pt / 1 |
 | Panel-letter offset | left-axis x − 9.5 mm; baseline top-axis y + 0.4 mm |
+| Row / column frame-to-frame gap | 14 / 14 mm, including labels and legends |
 
 Always verify Arial regular/italic availability, including mathematical text. Never
 silently fall back to another font. Superscripts/subscripts use normal typography

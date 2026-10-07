@@ -288,7 +288,7 @@ def preview(out, source_dir=None):
     assert len(svg.findall('.//s:image',ns))==1
     styles={el.get('style','') for el in svg.iter() if 'font-family' in el.get('style','')}
     assert styles and all("'Arial'" in s for s in styles)
-    checks=['All nine panel frames preserve common row height and 12 mm gaps.',
+    checks=['All nine panel frames preserve common row height and 14 mm row gaps; ordinary columns start with 14 mm frame gaps.',
             'Decorated panels fit canvas; adjacent content and gutter text do not collide.',
             'GC has two offset spectra, no separator, and one highlighted newly added peak.',
             'Four paired curves use main/mid and 4.5 pt markers.',

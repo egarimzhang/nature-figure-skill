@@ -13,7 +13,8 @@ a statement of universal journal compliance; verify a specified submission's off
 - Axis/tick strokes 0.75 pt and #4D4D4D; curves 1.125 pt. Full frames once per side.
 - Point-line and legend markers 4.5 pt, edges 0.6 pt; dense spectral raw points are separate.
 - Bar/group outer edges retain side margins; no arbitrary hard-coded temperature limits.
-  Multirow gaps start at 12 mm including labels; increase only for actual content.
+  Row and column frame gaps start at 14 mm including labels and legends; increase only
+  for actual content.
 - After major x ticks are set, no x minors when distinct data positions correspond one-to-one
   with them; otherwise one unlabelled short midpoint minor per interval on continuous
   linear x axes. No invented categorical midpoint ticks. Units use parentheses; physical symbols italic.

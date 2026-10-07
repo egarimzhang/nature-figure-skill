@@ -48,6 +48,6 @@ synthetic blue/red fixture keys are migrated to primary1/primary2 without alteri
 The six-colour fixture keeps a documented source-key mapping inside its script.
 
 All tests exercise the fixed Arial typography, 4.5 pt paired markers, bar margins,
-12 mm row gaps and standard colourbar boundary. Numerical parameters and editable
+14 mm row and column gaps and standard colourbar boundary. Numerical parameters and editable
 SVG/PDF/PNG/TIFF accompany the source. Historical galleries are structural references,
 not active colours/fonts or scientific processing instructions.

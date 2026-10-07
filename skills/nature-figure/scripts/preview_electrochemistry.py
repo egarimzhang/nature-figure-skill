@@ -12,8 +12,9 @@ from publication_colors import *
 from publication_style import *
 
 PREVIEW={
-    'figure_width_mm':180.,'left_mm':12.,'column_pitch_mm':60.,
-    'plot_width_mm':46.,'aspect':1.3,'bottom_mm':10.5,'top_mm':13.,'row_gap_mm':12.,
+    'figure_width_mm':180.,'left_mm':12.,'column_pitch_mm':STYLE['cell_pitch_mm'],
+    'plot_width_mm':STYLE['plot_width_mm'],'aspect':STYLE['aspect'],
+    'bottom_mm':10.5,'top_mm':13.,'row_gap_mm':STYLE['row_frame_gap_mm'],
     'ir_reference_V':.8,'ir_maximum_V':1.4,'ir_target_band_cm1':1660.,
     'xps_baseline':.028,'bar_width_data':105.,'fill_alpha':.65,
     'pdos_offsets':[0.,2.25],

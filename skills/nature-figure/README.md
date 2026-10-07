@@ -6,7 +6,7 @@ specified in [SKILL.md](SKILL.md), [layout-contract](references/layout-contract.
 
 Three-panel final-width reference: 180 mm; plots 46 × 35.38 mm; Arial axes 8 pt, ordinary
 text 7.5 pt and panel labels 12 pt. Dark-grey full frames 0.75 pt, curves 1.125 pt.
-Point-line markers 4.5 pt, multirow frame gaps 12 mm, outer-edge bar margins. Colourbar
+Point-line markers 4.5 pt, row and column frame gaps 14 mm, outer-edge bar margins. Colourbar
 right borders follow the ordinary unshortened column frame, not narrowed twins.
 Registered two-family schemes: blue-violet/coral (default), blue-violet/yellow, and blue-violet/orange. Primary 3 yellow and Primary 4 orange are mutually exclusive. Curves use main, paired curves main/mid; ordinary non-stacked bars use a main-to-mid gradient with mean and sample SD for replicates, while other non-peak closed shapes use light/outline. Scheme-specific extensions require explicit instruction; cyan/blue/violet retain one anchor each. Axis units use parentheses; data-matched major x ticks omit minor ticks.
 

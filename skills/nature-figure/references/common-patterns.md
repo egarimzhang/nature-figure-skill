@@ -5,8 +5,9 @@ See layout-contract.md for authoritative defaults; api.md for executable signatu
 ## Regular rows
 
 For a 180 mm three-column grid, use 60 mm pitches, left axes at 12/72/132 mm and
-46 mm plotting widths. Height is 46/1.3 mm; row pitch starts at that height + 12 mm,
-then increases only as actual upper/lower text requires, not arbitrary subplot hspace. Add panel labels before QA and preserve
+46 mm plotting widths, leaving 14 mm between column frames. Height is 46/1.3 mm;
+row pitch starts at that height + 14 mm, then increases only as actual upper/lower
+text requires, not arbitrary subplot hspace. Add panel labels before QA and preserve
 common row top/bottom edges. Adjust margins rather than allowing text collisions.
 
 ## Twin axes
