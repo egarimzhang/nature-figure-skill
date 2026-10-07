@@ -12,8 +12,8 @@ from publication_colors import *
 from publication_style import *
 
 PREVIEW = {
-    'canvas_width_mm': 180., 'left_mm': 12., 'column_pitch_mm': 60.,
-    'bottom_mm': 12.5, 'top_mm': 7., 'plot_width_mm': 46., 'aspect': 1.3,
+    'canvas_width_mm': STYLE['figure_width_mm'], 'left_mm': 10., 'column_pitch_mm': STYLE['cell_pitch_mm'],
+    'bottom_mm': 12.5, 'top_mm': 7., 'plot_width_mm': STYLE['plot_width_mm'], 'aspect': STYLE['aspect'],
     'xps_baseline': .028, 'xps_families': ['primary1', 'primary3', 'primary2'],
     'paired_roles': ['main', 'mid'],
     'stack_roles_bottom_to_top': ['outline', 'main', 'mid', 'light'],
@@ -113,7 +113,7 @@ def main(out):
         p = ax.get_position()
         assert np.isclose(p.width*fw,pw) and np.isclose(p.height*fh,ph)
         offset = (letter.get_transform().transform((0,1))-ax.transAxes.transform((0,1)))/fig.dpi*25.4
-        assert np.allclose(offset,[-9.5,.4])
+        assert np.allclose(offset,[STYLE['panel_dx_mm'],STYLE['panel_dy_mm']])
         geometries.append([p.x0*fw,p.y0*fh,p.width*fw,p.height*fh])
     stem = out/'abc_preview'
     save_editable_svg(fig, stem.with_suffix('.svg'))
@@ -155,7 +155,7 @@ def main(out):
               'Three XPS components plus baseline reproduce the unchanged total.',
               'Panel b contains four main/mid curves with 4.5 pt markers.',
               'Panel c has three bars, four layers each, 12 values and zero error bars.',
-              '180 mm canvas, 46 mm frames at 1.3:1, established fonts and strokes retained.',
+              '160 mm canvas, 39 mm frames at 1.25:1, established fonts and strokes retained.',
               'Panel anchors and text extents fit the canvas with no adjacent-panel overlap.',
               'SVG contains three native gradients, editable Arial text, no raster images.']
     (out/'validation.json').write_text(json.dumps({'passed':True,'checks':checks},indent=2)+'\n')

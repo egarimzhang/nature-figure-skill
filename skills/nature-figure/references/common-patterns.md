@@ -4,8 +4,8 @@ See layout-contract.md for authoritative defaults; api.md for executable signatu
 
 ## Regular rows
 
-For a 180 mm three-column grid, use 60 mm pitches, left axes at 12/72/132 mm and
-46 mm plotting widths, leaving 14 mm between column frames. Height is 46/1.3 mm;
+For a 160 mm three-column grid, use 55 mm pitches, left axes at 10/65/120 mm and
+39 mm plotting widths, leaving 16 mm between column frames. Height is 31.2 mm;
 row pitch starts at that height + 14 mm, then increases only as actual upper/lower
 text requires, not arbitrary subplot hspace. Add panel labels before QA and preserve
 common row top/bottom edges. Adjust margins rather than allowing text collisions.
@@ -40,7 +40,7 @@ cax.tick_params(pad=STYLE['colourbar_tick_pad'])
 ```
 
 Without an ordinary reference, pass `reference_right_mm` from the nominal grid.
-For a 46 mm column allocation, 1.8 mm bar and 2 mm gap leave 42.2 mm for the heatmap.
+For a 39 mm column allocation, 1.8 mm bar and 2 mm gap leave 35.2 mm for the heatmap.
 Colourbar numbers lie outside the aligned edge; check actual text collisions and panel
 letters, not only the union boxes. A compact title may sit above the bar. Do not squeeze
 fonts or distort intrinsic/equal aspect to satisfy decorative alignment.

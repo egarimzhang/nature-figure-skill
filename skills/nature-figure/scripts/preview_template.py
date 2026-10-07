@@ -11,7 +11,7 @@ from publication_style import *
 
 PREVIEW = {
     'figure_width_mm': STYLE['figure_width_mm'], 'plot_width_mm': STYLE['plot_width_mm'], 'aspect': STYLE['aspect'],
-    'left_mm': 12.0, 'column_pitch_mm': STYLE['cell_pitch_mm'],
+    'left_mm': 10.0, 'column_pitch_mm': STYLE['cell_pitch_mm'],
     'bottom_mm': STYLE['multirow_bottom_mm'], 'top_mm': STYLE['multirow_top_mm'], 'row_frame_gap_mm': STYLE['row_frame_gap_mm'],
     'marker_size_pt': STYLE['marker_size'], 'bar_width_data': 105.0,
     'temperature_limits': [180,820],
@@ -155,7 +155,7 @@ def preview(out, source_dir=None):
     right.plot(temperatures,conversion,color=red['main'],lw=STYLE['curve_width'],marker='o',ms=STYLE['marker_size'],mew=STYLE['marker_edge'])
     legends.append(legend_above(right,[Patch(facecolor=blue['main'],label='S'),
                     Line2D([],[],color=red['main'],marker='o',ms=STYLE['marker_size'],lw=STYLE['curve_width'],label='X')],ncol=2))
-    twin_width=fit_twin_to_width(e,right,target_right_mm=118)
+    twin_width=fit_twin_to_width(e,right,target_right_mm=b.get_position().x1*fw)
     right_axis_mm=e.get_position().x1*fw
     np.savetxt(data_dir/'e_twin.csv',np.column_stack([temperatures,selectivity,conversion]),delimiter=',',
               header='temperature_K,selectivity_percent,conversion_percent',comments='')
@@ -243,7 +243,7 @@ def preview(out, source_dir=None):
         assert bb.x0>=0 and bb.x1<=fig.bbox.width and bb.y0>=0 and bb.y1<=fig.bbox.height, (idx,bb)
         assert abs(rect[3]-ph)<1e-6
         offset=(panel_letters[idx].get_transform().transform((0,1))-ax.transAxes.transform((0,1)))/fig.dpi*25.4
-        assert np.allclose(offset,[-9.5,.4])
+        assert np.allclose(offset,[STYLE['panel_dx_mm'],STYLE['panel_dy_mm']])
         geometries.append({'panel':chr(97+idx),'rectangle_mm':rect.tolist()})
     for row in range(3):
         assert np.ptp([axes[k].get_position().y0 for k in range(row*3,row*3+3)])<1e-9
@@ -257,7 +257,7 @@ def preview(out, source_dir=None):
                         cax.title,*cax.get_yticklabels()]
                 assert all(not next_letter.overlaps(t.get_window_extent(renderer)) for t in h_text)
             else:
-                assert boxes[k].x1<boxes[k+1].x0, f'Horizontal collision {k}'
+                assert boxes[k].x1<boxes[k+1].x0, f'Horizontal collision {k}: {boxes[k].x1/fig.dpi*25.4:.2f} versus {boxes[k+1].x0/fig.dpi*25.4:.2f} mm'
     for col in range(3):
         for row in range(2):
             assert boxes[row*3+col].y0>boxes[(row+1)*3+col].y1, f'Vertical collision {row,col}'
@@ -269,7 +269,7 @@ def preview(out, source_dir=None):
     assert new_peak[np.argmin(abs(rt-6.7))]>.65
     assert abs(before[np.argmin(abs(rt-6.7))]-.03)<.01
     pad_left=(300-PREVIEW['bar_width_data']/2-PREVIEW['temperature_limits'][0])/640*pw
-    parameters={**PREVIEW,'canvas_mm':[fw,fh],'axis_text_pt':8,'inplot_text_pt':7.5,'panel_letter_pt':12,
+    parameters={**PREVIEW,'canvas_mm':[fw,fh],'axis_text_pt':6,'inplot_text_pt':6,'panel_letter_pt':10,
                 'axis_width_pt':.75,'curve_width_pt':1.125,'panel_geometry':geometries,
                 'bar_edge_padding_normal_mm':pad_left,'e_twin_width_mm':twin_width,
                 'e_right_axis_mm':right_axis_mm,'b_right_frame_mm':column_right_mm,'h_alignment_reference':'b ordinary frame','h_colourbar_right_mm':cax.get_position().x1*fw,
@@ -288,7 +288,7 @@ def preview(out, source_dir=None):
     assert len(svg.findall('.//s:image',ns))==1
     styles={el.get('style','') for el in svg.iter() if 'font-family' in el.get('style','')}
     assert styles and all("'Arial'" in s for s in styles)
-    checks=['All nine panel frames preserve common row height and 14 mm row gaps; ordinary columns start with 14 mm frame gaps.',
+    checks=['All nine panel frames preserve common row height and 14 mm row gaps; ordinary columns start with 16 mm frame gaps.',
             'Decorated panels fit canvas; adjacent content and gutter text do not collide.',
             'GC has two offset spectra, no separator, and one highlighted newly added peak.',
             'Four paired curves use main/mid and 4.5 pt markers.',

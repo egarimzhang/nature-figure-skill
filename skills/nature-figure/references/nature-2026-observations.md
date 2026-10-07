@@ -84,7 +84,7 @@ Actionable rules:
 
 ## Cross-cutting Nature rules from the sample
 
-- Historical sampled panels used small bold letters; current user defaults instead use the regular 12 pt axes-anchored labels in layout-contract.md.
+- Historical sampled panels used small bold letters; current user defaults instead use the 10 pt bold axes-anchored labels with baseline 1 mm above the frame in layout-contract.md.
 - Figure pages are narrative, not dashboard-like. A dominant panel is normal.
 - Legends are often omitted if direct labeling is possible.
 - Background discipline matters more than ornament. White for charts, black only for image plates.

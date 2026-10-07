@@ -55,7 +55,7 @@ for name,family in FAMILIES.items():
     family['line']=family['outline']  # Deprecated compatibility role, never curve default.
     family['pair_light']=family['mid']  # Deprecated role; new primary pairs read mid.
 
-NEUTRALS = {'black': '#000000', 'dark': '#4D4D4D', 'mid': '#767676',
+NEUTRALS = {'black': '#000000', 'dark': '#000000', 'mid': '#767676',
             'light': '#CFCECE', 'pale': '#F2F2F2', 'white': '#FFFFFF'}
 BAR_ALPHA = 1.0
 FILL_ALPHA_BASE, FILL_ALPHA_TIP = 0.40, 0.82

@@ -9,11 +9,11 @@ a statement of universal journal compliance; verify a specified submission's off
 - Correct final physical canvas/plot dimensions; no independent panel scaling or tight crop.
 - Arial regular/italic are available and actually used. SVG text nodes remain editable;
   no unannounced fallback fonts, outlined text, mismatched mathematical font or clipped labels.
-- Axis labels/ticks 8 pt; ordinary labels 7.5 pt; lowercase panels 12 pt, regular.
-- Axis/tick strokes 0.75 pt and #4D4D4D; curves 1.125 pt. Full frames once per side.
+- Axis labels/ticks 6 pt; ordinary labels 6 pt; lowercase panels 10 pt, bold, with baseline 1 mm above the frame top.
+- Axis/tick strokes 0.75 pt and #000000; curves 1.125 pt. Full frames once per side.
 - Point-line and legend markers 4.5 pt, edges 0.6 pt; dense spectral raw points are separate.
 - Bar/group outer edges retain side margins; no arbitrary hard-coded temperature limits.
-  Row and column frame gaps start at 14 mm including labels and legends; increase only
+  Row and column frame gaps start at 14 and 16 mm, respectively including labels and legends; increase only
   for actual content.
 - After major x ticks are set, no x minors when distinct data positions correspond one-to-one
   with them; otherwise one unlabelled short midpoint minor per interval on continuous

@@ -10,18 +10,18 @@ from matplotlib.ticker import AutoMinorLocator, FixedLocator, NullLocator
 from publication_colors import NEUTRALS, apply_color_style
 
 STYLE = {
-    'font': 'Arial', 'axis_font': 8.0, 'text_font': 7.5, 'panel_font': 12.0,
+    'font': 'Arial', 'axis_font': 6.0, 'text_font': 6.0, 'panel_font': 10.0,
     'axis_width': 0.75, 'curve_width': 1.125,
     'major_length': 2.5, 'minor_length': 1.5,
     'tick_pad': 1.5, 'label_pad': 2.5,
     'error_width': 0.75, 'error_capsize': 1.8,
     'marker_size': 4.5, 'marker_edge': 0.6,
-    'figure_width_mm': 180.0, 'plot_width_mm': 46.0, 'aspect': 1.3,
-    'row_frame_gap_mm': 14.0, 'column_frame_gap_mm': 14.0,
+    'figure_width_mm': 160.0, 'plot_width_mm': 39.0, 'aspect': 1.25,
+    'row_frame_gap_mm': 14.0, 'column_frame_gap_mm': 16.0,
     'multirow_bottom_mm': 10.5, 'multirow_top_mm': 13.0,
     'bar_edge_fraction': 0.10546875,  # accepted three-bar reference; editable per layout
     'colourbar_width_mm': 1.8, 'colourbar_gap_mm': 2.0, 'colourbar_tick_pad': 3.0,
-    'cell_pitch_mm': 60.0, 'panel_dx_mm': -9.5, 'panel_dy_mm': 0.4,
+    'cell_pitch_mm': 55.0, 'panel_dx_mm': -9.5, 'panel_dy_mm': 1.0,
 }
 
 
@@ -101,12 +101,12 @@ def add_panel_label(ax, label, *, dx_mm=None, dy_mm=None):
     dy=STYLE['panel_dy_mm'] if dy_mm is None else dy_mm
     transform=ax.transAxes+transforms.ScaledTranslation(dx/25.4,dy/25.4,ax.figure.dpi_scale_trans)
     return ax.text(0,1,label,transform=transform,ha='left',va='baseline',
-                   fontsize=STYLE['panel_font'],fontweight='normal',
+                   fontsize=STYLE['panel_font'],fontweight='bold',
                    color=NEUTRALS['dark'],clip_on=False)
 
 
 def make_twin_axis(ax):
-    """Draw each frame side only once; both y axes stay dark grey."""
+    """Draw each frame side only once; apply series-linked axis colours as needed."""
     right=ax.twinx()
     style_axis(right)
     ax.spines['right'].set_visible(False)
@@ -143,7 +143,7 @@ def set_bar_padding(ax, positions, widths, *, axis='x', margin_fraction=None):
     Supply individual centres/widths for grouped bars, or once per stack. Preserve
     positions and axis direction. Do not call when explicit limits should prevail.
     The margin is the fraction of final frame width/height on EACH side. The accepted
-    46 mm, three-bar example leaves 4.85 mm. Nonlinear axes need explicit layout.
+    39 mm, three-bar reference leaves about 4.11 mm. Nonlinear axes need explicit layout.
     """
     if axis not in ('x','y'):
         raise ValueError('axis must be x or y')

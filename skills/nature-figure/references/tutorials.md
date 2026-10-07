@@ -13,7 +13,7 @@ python scripts/preview_palette.py OUTPUT_DIRECTORY
 python scripts/preview_colors.py OUTPUT_DIRECTORY
 ```
 
-The approved 120 × 102.27 mm abcd layout preserves 46 × 35.38 mm frames: six-colour
+The current 120 × 95.9 mm abcd layout uses 39 × 31.2 mm frames: six-colour
 XPS; two objects/two main-mid measurements; three bars/four primary levels/no errors;
 two Raman families with six offset spectra each. Primary 3 plus the three one-anchor
 auxiliaries are explicitly enabled in a, not automatically used elsewhere. Fixtures are in assets/six-colour-preview-data.
@@ -31,7 +31,7 @@ outline/light fill; e: Primary 1/2 grouped gradient bars showing replicate means
 PDOS with outline/light fill; g: illustrative reaction barriers with a designated step in the second active primary; h: temperature-XRD map with aligned colourbar; i: two Nyquist model curves.
 Scientific conventions and mock model parameters are exported beside the figure. No
 surface-phase identification, spin assignment or experimental rate-control inference
-is implied. Both colourbars reference ordinary 1.3:1 frames, never narrowed neighbours.
+is implied. Both colourbars reference ordinary 1.25:1 frames, never narrowed neighbours.
 
 ## Other maintained chemistry recipes
 
@@ -48,6 +48,6 @@ synthetic blue/red fixture keys are migrated to primary1/primary2 without alteri
 The six-colour fixture keeps a documented source-key mapping inside its script.
 
 All tests exercise the fixed Arial typography, 4.5 pt paired markers, bar margins,
-14 mm row and column gaps and standard colourbar boundary. Numerical parameters and editable
+14 mm row and 16 mm column gaps and standard colourbar boundary. Numerical parameters and editable
 SVG/PDF/PNG/TIFF accompany the source. Historical galleries are structural references,
 not active colours/fonts or scientific processing instructions.

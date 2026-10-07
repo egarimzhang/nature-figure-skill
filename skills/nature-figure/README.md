@@ -4,9 +4,9 @@ Editable scientific figures in Python or R. The active personal chemistry templa
 specified in [SKILL.md](SKILL.md), [layout-contract](references/layout-contract.md) and
 [colour contract](references/color-contract.md). User instructions override defaults.
 
-Three-panel final-width reference: 180 mm; plots 46 × 35.38 mm; Arial axes 8 pt, ordinary
-text 7.5 pt and panel labels 12 pt. Dark-grey full frames 0.75 pt, curves 1.125 pt.
-Point-line markers 4.5 pt, row and column frame gaps 14 mm, outer-edge bar margins. Colourbar
+Three-panel final-width reference: 160 mm; plots 39 × 31.2 mm; Arial axes and ordinary
+text 6 pt, panel labels 10 pt bold with baseline 1 mm above the frame. Pure-black full frames 0.75 pt, curves 1.125 pt.
+Point-line markers 4.5 pt, row/column frame gaps 14/16 mm, outer-edge bar margins. Colourbar
 right borders follow the ordinary unshortened column frame, not narrowed twins.
 Registered two-family schemes: blue-violet/coral (default), blue-violet/yellow, and blue-violet/orange. Primary 3 yellow and Primary 4 orange are mutually exclusive. Curves use main, paired curves main/mid; ordinary non-stacked bars use a main-to-mid gradient with mean and sample SD for replicates, while other non-peak closed shapes use light/outline. Scheme-specific extensions require explicit instruction; cyan/blue/violet retain one anchor each. Axis units use parentheses; data-matched major x ticks omit minor ticks.
 

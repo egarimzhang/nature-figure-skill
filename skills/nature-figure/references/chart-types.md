@@ -74,7 +74,7 @@ editable; export matrix/coordinate data. Respect real temperature sampling/resol
 
 Heatmaps/images may require square cells or intrinsic image aspect. Geometric equal
 scales, log axes, polar/radar coordinates and microscopy channels have semantic
-constraints; the default 1.3:1 rectangle does not override them. Numeric intensity and
+constraints; the default 1.25:1 rectangle does not override them. Numeric intensity and
 centred deviations use continuous scales, not arbitrary categorical colours. Distinct
 histograms/distributions require stated binning/normalization and real observations.
 

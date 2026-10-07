@@ -6,31 +6,31 @@ These user-confirmed defaults replace earlier 75 mm plot / 11 pt text / 20 pt la
 ## Physical parameters
 
 Numerical Python source: `../scripts/publication_style.py`, dictionary `STYLE`.
-The validated 1×3 reference canvas is 180 × 54.88 mm. Each 60 mm cell has its left
-axis at 12 mm from the cell edge, 46 mm plot width and 46/1.3 mm height. Bottom
-margin 12.5 mm, top margin 7 mm. The column frame-to-frame gap is 60 − 46 = 14 mm
+The default 1×3 reference canvas is 160 × 50.7 mm. Ordinary axes start at
+10/65/120 mm, with 39 mm plot width and 31.2 mm height (1.25:1). Bottom
+margin 12.5 mm, top margin 7 mm. The column frame-to-frame gap is 55 − 39 = 16 mm
 and includes the next y-axis labels. Multirow canvases add appropriate row gaps; do
 not fix every composite's height to this single-row example. Row frame-to-frame gaps
-also start at 14 mm, INCLUDING space for axis titles and legends. These are frame-edge
-distances, not 14 mm of extra blank space after all text.
-The approved 3×3 reference is 180 × 157.65 mm: bottom 10.5 mm, top 13 mm, three
-35.38 mm frames and two 14 mm row gaps. Adjust margins/gaps for actual text without
+start at 14 mm, INCLUDING space for axis titles and legends. These are frame-edge
+distances, not extra blank space after all text.
+A 3×3 reference is 160 × 145.1 mm: bottom 10.5 mm, top 13 mm, three
+31.2 mm frames and two 14 mm row gaps. Adjust margins/gaps for actual text without
 shrinking fonts as the first response. Do not hard-code that total height for other figures.
 
 | Element | Final-size default |
 |---|---|
-| Axis titles, numeric/category ticks | Arial 8 pt |
-| Legends, peak labels, ordinary annotations | Arial 7.5 pt |
-| Lowercase panel letters | Arial regular 12 pt |
-| Axes and major/minor tick strokes | 0.75 pt, #4D4D4D |
+| Axis titles, numeric/category ticks | Arial 6 pt |
+| Legends, peak labels, ordinary annotations | Arial 6 pt |
+| Lowercase panel letters | Arial bold 10 pt |
+| Axes and major/minor tick strokes | 0.75 pt, #000000 |
 | Curves / point-line connections | 1.125 pt (1.5 × axis stroke) |
 | Major / minor tick length | 2.5 / 1.5 pt, outward |
 | Tick label pad / axis label pad | 1.5 / 2.5 pt |
 | Point-line marker size / marker edge | 4.5 / 0.6 pt |
 | Error line / cap stroke | 0.75 / 0.75 pt |
 | Matplotlib error capsize / alpha | 1.8 pt / 1 |
-| Panel-letter offset | left-axis x − 9.5 mm; baseline top-axis y + 0.4 mm |
-| Row / column frame-to-frame gap | 14 / 14 mm, including labels and legends |
+| Panel-letter offset | left-axis x − 9.5 mm; baseline top-axis y + 1 mm |
+| Row / column frame-to-frame gap | 14 / 16 mm, including labels and legends |
 
 Always verify Arial regular/italic availability, including mathematical text. Never
 silently fall back to another font. Superscripts/subscripts use normal typography
@@ -58,12 +58,12 @@ that was only a spacing stress test. White background; no grid by default.
 
 Axis titles use quantity followed by parenthesized units, with no quantity/unit slash.
 Physical symbols italic; units/chemical formulas/descriptive words upright:
-`$E$ (V vs. RHE)`, `Binding energy (eV)`, `Conversion (%)`. Ordinary text is dark grey;
+`$E$ (V vs. RHE)`, `Binding energy (eV)`, `Conversion (%)`. Ordinary text is pure black;
 series-linked labels may use their colours.
 Keep titles near tick labels using the stated pad, not a fixed far-left figure coordinate.
-For a long axis title, preserve the 8 pt default first. Try moving its position within
-the decorated panel, wrapping it, or using a clear multiplier above the axis to shorten
-tick numbers. A vertical title may move downward no farther than the x-axis title's
+For a long axis title, preserve the 6 pt default first and keep it on one line when it fits. Try moving its position within
+the decorated panel, using a clear multiplier above the axis to shorten
+tick numbers, or wrapping only when needed. A vertical title may move downward no farther than the x-axis title's
 height; avoid upward movement that can cover the panel letter. A horizontal title may
 move left or right without crossing the y-axis title or right frame. Keep subplot frames
 aligned. If these changes still cannot produce a balanced layout, reduce title size
@@ -88,7 +88,7 @@ requirements; do not infer XPS/Raman/XAS processing or assignments from style ex
 
 Measure from the OUTER edges of the first/last bar, including offsets and widths of
 all bars in a group. Keep visible margins for ordinary and stacked bars. The approved
-three-bar example leaves about 4.85 mm on each side of a 46 mm frame. The helper starts
+three-bar reference leaves about 4.11 mm on each side of a 39 mm frame. The helper starts
 with 0.10546875 of the frame per side; adjust for bar count/group structure and required
 axis coverage. Bar width remains about 50–60% of category spacing, not a way to hide
 poor limits. Preserve observed positions and explicit user limits; never generalize the
@@ -118,15 +118,15 @@ For one left/one right axis, preserve left edge and height while shortening the 
 width until its decorated right edge fits the intended envelope. Compute the reduction
 from actual text; no fixed percentage. Draw each frame side once. Colourbars and extra
 right axes consume real layout space; position neighbouring panels accordingly. The
-1.3:1 default can yield to these requirements. Equal-aspect scientific geometry/images
+1.25:1 default can yield to these requirements. Equal-aspect scientific geometry/images
 must keep their meaningful aspect; do not stretch them to satisfy a decorative ratio.
 
 For a heatmap plus right-side colourbar, align the colourbar's RIGHT BORDER to that
 standard boundary, not to the shortened twin frame or the right edge of colourbar
 text. Keep the heatmap left edge and row height; derive its width after subtracting
 colourbar width (1.8 mm) and gap (2 mm). Tick-text pad starts at 3 pt, with text outside
-the aligned border. For the approved b/e/h column, b frame and h colourbar right are
-both 118 mm from the canvas left; e frame is about 108.34 mm after accommodating text.
+the aligned border. In the maintained 3×3 preview, b frame and h colourbar right are
+both 104 mm from the canvas left; e frame is about 96.32 mm after accommodating text.
 These coordinates demonstrate the rule, not universal absolute positions.
 
 Check adjacent panel letters, colourbar titles/ticks and axis titles at their actual

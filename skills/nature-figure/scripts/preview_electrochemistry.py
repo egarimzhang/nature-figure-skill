@@ -12,7 +12,7 @@ from publication_colors import *
 from publication_style import *
 
 PREVIEW={
-    'figure_width_mm':180.,'left_mm':12.,'column_pitch_mm':STYLE['cell_pitch_mm'],
+    'figure_width_mm':STYLE['figure_width_mm'],'left_mm':10.,'column_pitch_mm':STYLE['cell_pitch_mm'],
     'plot_width_mm':STYLE['plot_width_mm'],'aspect':STYLE['aspect'],
     'bottom_mm':10.5,'top_mm':13.,'row_gap_mm':STYLE['row_frame_gap_mm'],
     'ir_reference_V':.8,'ir_maximum_V':1.4,'ir_target_band_cm1':1660.,
@@ -212,10 +212,10 @@ def main(out,fixture_dir=None):
         zcurves.append(z)
         i.plot(z.real,-z.imag,color=FAMILIES[family]['main'],label=chr(65+k),marker=['o','s'][k],
                markevery=7,ms=STYLE['marker_size'],mew=STYLE['marker_edge'],mfc='white',mec=FAMILIES[family]['main'])
-    i.set(xlim=(0,195),ylim=(0,150),xticks=[0,50,100,150],yticks=[0,50,100,150],
+    i.set(xlim=(0,195),ylim=(0,156),xticks=[0,50,100,150],yticks=[0,50,100,150],
           xlabel=r"$Z^{\prime}$ ($\Omega$)",ylabel=r"$-Z^{\prime\prime}$ ($\Omega$)")
     set_x_minor_ticks_from_data(i,np.r_[zcurves[0].real,zcurves[1].real])
-    # (195/150)==1.3, so equal impedance scales retain the ordinary 1.3:1 frame.
+    # (195/156)==1.25, so equal impedance scales retain the ordinary 1.25:1 frame.
     i.set_aspect('equal',adjustable='box');i.legend(loc='upper left',ncol=2,handlelength=1.4,columnspacing=.8)
     i.text(.06,.71,'High → low f',transform=i.transAxes)
     save_csv(data/'i_nyquist.csv',[frequency,zcurves[0].real,zcurves[0].imag,zcurves[1].real,zcurves[1].imag],
@@ -227,7 +227,7 @@ def main(out,fixture_dir=None):
         p=ax.get_position();geometries.append([p.x0*fw,p.y0*fh,p.width*fw,p.height*fh])
         assert abs(p.height*fh-ph)<1e-6
         offset=(letter.get_transform().transform((0,1))-ax.transAxes.transform((0,1)))/fig.dpi*25.4
-        assert np.allclose(offset,[-9.5,.4])
+        assert np.allclose(offset,[STYLE['panel_dx_mm'],STYLE['panel_dy_mm']])
     for row in range(3):
         assert np.ptp([axes[k].get_position().y0 for k in range(row*3,row*3+3)])<1e-9
     for col in range(3):
@@ -282,7 +282,7 @@ def main(out,fixture_dir=None):
             'nyquist_equation':'Z = Rs + Rct/(1+i*omega*Rct*C) + sigma*(1-i)/sqrt(omega)'}
     (out/'parameters.json').write_text(json.dumps(params,indent=2)+'\n')
     (out/'validation.json').write_text(json.dumps({'passed':True,'checks':[
-        'Both colourbar right borders align to ordinary 1.3:1 frames (d/e).',
+        'Both colourbar right borders align to ordinary 1.25:1 frames (d/e).',
         'IR difference is zero at reference potential; zero-centred signed scale.',
         'XPS uses Primary 1/2 plus first on-request Primary 3 yellow.',
         'Four paired curves, one closed CV loop, and six grouped mean/SD gradient bars.',

@@ -29,7 +29,7 @@ Primary 3 and 4 never enter the same automatic sequence. Primary 4 may replace P
 
 Independent curves use main. Two related measurements of one object use main + mid, reinforced with solid/filled versus dashed/open markers when helpful. Light is too weak for a routine equal-status measurement and is reserved for fills or deliberately backgrounded signals. `line` aliases outline and `pair_light` aliases mid for compatibility only.
 
-Point-line markers remain 4.5 pt with 0.6 pt edges. Point-line error bars use their series family outline so overlapping uncertainties retain identity. Bar-chart error bars instead use the neutral axis colour `#4D4D4D` and sit above bars. Error stroke/cap thickness is 0.75 pt with capsize 1.8 pt. Error definition and n must be supplied or explicitly agreed; never invent uncertainty.
+Point-line markers remain 4.5 pt with 0.6 pt edges. Point-line error bars use their series family outline so overlapping uncertainties retain identity. Bar-chart error bars instead use the neutral axis colour `#000000` and sit above bars. Error stroke/cap thickness is 0.75 pt with capsize 1.8 pt. Error definition and n must be supplied or explicitly agreed; never invent uncertainty.
 
 ## Closed shapes and ordinary bars
 
@@ -45,6 +45,6 @@ Positive decomposed/fitted peaks such as XPS use a peak gradient rather than the
 
 ## Maps, text and export
 
-Axes, ticks, titles, bar errors and ordinary text use `#4D4D4D`. Series annotations may use the series colour; white text on a dark fill is a readability exception. Continuous intensity uses an ordered scale and interpretable colourbar. Signed changes use a meaningful neutral centre; `diverging_cmap(scheme=...)` uses the active pair. State reference and sign convention for difference maps. Keep source matrices for raster maps and document normalization, offsets and interpolation.
+Axes, ticks, titles, bar errors and ordinary text use `#000000`. Series annotations may use the series colour; white text on a dark fill is a readability exception. Continuous intensity uses an ordered scale and interpretable colourbar. Signed changes use a meaningful neutral centre; `diverging_cmap(scheme=...)` uses the active pair. State reference and sign convention for difference maps. Keep source matrices for raster maps and document normalization, offsets and interpolation.
 
 Deliver standalone editable Python, native SVG gradients, fixed-size SVG/PDF and preview PNG. Manual SVG edits do not update Python. See `tutorials.md` for maintained synthetic previews.

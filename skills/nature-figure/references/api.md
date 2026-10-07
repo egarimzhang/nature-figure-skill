@@ -7,7 +7,7 @@ of truth; do not paste styles from historical atlases.
 ## Style and layout
 
 - `STYLE`: final-size dimensions, font sizes, strokes, ticks, marker and error settings.
-- `apply_publication_style()`: verify Arial regular/italic; set dark-grey complete-frame
+- `apply_publication_style()`: verify Arial regular/italic; set pure-black complete-frame
   defaults, main curve colours and editable exports. Do not call old conflicting styles afterward.
 - `style_axis(ax, categorical_x=False, categorical_y=False)`: four spines, correct ticks,
   y-axis midpoint linear minor ticks and pads. Call after creating the axis; specify categorical
@@ -19,7 +19,7 @@ of truth; do not paste styles from historical atlases.
   units and italic physical symbols.
 - `add_panel_label(ax, label, dx_mm=None, dy_mm=None)`: anchors to axes left/top with
   physical offsets. It follows later layout changes; no axis-title-bound anchoring.
-- `make_twin_axis(ax)`: one visible copy of each frame edge; right ticks and grey labels.
+- `make_twin_axis(ax)`: one visible copy of each frame edge; right ticks and black labels.
 - `fit_twin_to_width(ax, right, target_right_mm=..., minimum_width_mm=20)`: solve decorated
   right boundary while retaining left edge and height. Set limits/text before fitting.
 - `set_bar_padding(ax, positions, widths, axis='x', margin_fraction=None)`: centre-aligned
@@ -39,8 +39,8 @@ import matplotlib.pyplot as plt
 from publication_style import *
 from publication_colors import *
 apply_publication_style()
-fig=plt.figure(figsize=(60/25.4,54.884615/25.4))
-ax=fig.add_axes([12/60,12.5/54.884615,46/60,(46/1.3)/54.884615])
+fig=plt.figure(figsize=(160/25.4,50.7/25.4))
+ax=fig.add_axes([10/160,12.5/50.7,39/160,31.2/50.7])
 style_axis(ax)
 ax.set(xlabel=r'$T$ (K)',ylabel='Conversion (%)')
 ax.set_xticks([300,500,700])
@@ -91,7 +91,7 @@ Matched replicate stacks are summed along components BEFORE SD/SEM is computed.
 It returns `(segment_means, cumulative_boundary_means, cumulative_errors)`.
 Specify `error_kind='sd'` or `'sem'` explicitly and state n/meaning in the caption.
 `error_scope='total'` shows only the total. `annotate=True` places each mean inside its
-segment at 7.5 pt, with contrasting ink. Do not label cumulative uncertainty as segment
+segment at 6 pt, with contrasting ink. Do not label cumulative uncertainty as segment
 uncertainty or sum standard deviations. Provided asymmetric errors/CIs require their
 own scientifically justified calculation. No invented errors for real data. When errors
 are not requested or not supplied, draw solid `ax.bar` stacks directly without this

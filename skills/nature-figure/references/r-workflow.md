@@ -13,7 +13,7 @@ Use ggplot2/grid for basic plots, patchwork for composition, ComplexHeatmap when
 matrix structure warrants it, svglite/cairo_pdf for editable vectors, ragg for raster.
 Only require packages needed by the actual task.
 
-Typography: axis text/title 8 pt, ordinary text/legends 7.5 pt, panel letters 12 pt.
+Typography: axis text/title 6 pt, ordinary text/legends 6 pt, panel letters 10 pt bold.
 Axes/error strokes 0.75 pt, curves 1.125 pt. Point-line/legend markers have a 4.5 pt
 physical size and 0.6 pt edge; translate to the selected R point-size convention rather
 than assuming it matches Matplotlib. ggplot2 line widths use mm: convert using
@@ -25,13 +25,13 @@ linear major interval at 1.5 pt, with no grid. Do not silently omit required tic
 
 Grid physical units or measured grob bounds provide fixed panel dimensions and letter
 offsets. Do not use auto-tagging that anchors to varying title bounds. Solve twin/colourbar
-occupied widths while keeping row top/bottom alignment. Start row and column
-frame-to-frame gaps at 14 mm including labels and legends. A narrowed twin is not a
+occupied widths while keeping row top/bottom alignment. Start row/column
+frame-to-frame gaps at 14/16 mm including labels and legends. A narrowed twin is not a
 column reference: align a colourbar's
 right border to the ordinary unshortened frame or nominal grid boundary. Labels sit
 outside; check actual artist/grob bounds. Default colourbar width/gap/tick pad are
 1.8 mm / 2 mm / 3 pt. Intrinsic image aspect is preserved. Derive bar side margins from
-outer edges, not group centres (about 4.85 mm per side in the 46 mm three-bar example).
+outer edges, not group centres (about 4.11 mm per side in the 39 mm three-bar reference).
 
 Use the same registered pair and exact anchors, with main/mid for paired curves.
 Choose Primary 1/2, Primary 1/3 yellow or Primary 1/4 orange; Primary 3/4 never coexist.
@@ -46,8 +46,8 @@ with raw observations retained in source data and no individual dots.
 Spectral fills need stronger tint/alpha and outlines. For matched replicate stacks,
 compute cumulative sums per replicate before SD/SEM. State error definitions/n.
 
-Use parenthesized units and italic physical symbols with Arial glyphs. Preserve 8 pt axis
-titles first; move, wrap, or shorten tick numbers with a multiplier before reducing size.
+Use parenthesized units and italic physical symbols with Arial glyphs. Preserve 6 pt axis
+titles first; keep them on one line when they fit, then move, shorten tick numbers with a multiplier, or wrap before reducing size.
 Keep titles inside the decorated panel and plot frames aligned. Export SVG/PDF
 at exact canvas size; retain editable text and native gradients when the selected R
 implementation supports them, otherwise disclose rasterized fills and keep adjustable

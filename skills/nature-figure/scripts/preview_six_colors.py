@@ -139,7 +139,7 @@ def main(out):
     for ax,letter in zip(axes,letters):
         p=ax.get_position();assert np.isclose(p.width*fw,pw) and np.isclose(p.height*fh,ph)
         offset=(letter.get_transform().transform((0,1))-ax.transAxes.transform((0,1)))/fig.dpi*25.4
-        assert np.allclose(offset,[-9.5,.4])
+        assert np.allclose(offset,[STYLE['panel_dx_mm'],STYLE['panel_dy_mm']])
         geometries.append([p.x0*fw,p.y0*fh,p.width*fw,p.height*fh])
     export(fig,out/'abcd_preview')
     root=ET.parse(out/'abcd_preview.svg').getroot();ns={'s':'http://www.w3.org/2000/svg'}
@@ -180,7 +180,7 @@ def main(out):
         'Four main/mid point-lines, 4.5 pt markers; source values unchanged.',
         'Three bars with four literal layers and 12 numeric labels; no error bars.',
         'Twelve Raman spectra plus one grey separator, raw values and offsets preserved.',
-        '46 mm frames at 1.3:1, 14 mm row and column gaps, Arial typography and physical panel anchors.',
+        '39 mm frames at 1.25:1, 14 mm row and 16 mm column gaps, Arial typography and physical panel anchors.',
         'Canvas bounds and adjacent panel envelopes do not collide.']},indent=2)+'\n')
     print(json.dumps({'passed':True,'canvas_mm':[fw,fh],'auxiliary_outlines':params['auxiliary_outline']}))
 

@@ -4,10 +4,10 @@ The active numeric policy is in layout-contract.md; colour roles are in color-co
 Use scientific relationships to choose the visual encoding; defaults are an editable
 starting point and do not turn a style preview into a scientific claim.
 
-The 180 mm reference is a final-size composite. Three 75 mm inner rectangles cannot fit
+The 160 mm reference is a final-size composite. Three 75 mm inner rectangles cannot fit
 it. Maintain physical typography/strokes and solve margins/plot width at final size;
-never separately rescale panels when composing. Dark-grey framing reduces visual weight
-without weakening coloured traces. Full frames do not imply four sets of ticks.
+never separately rescale panels when composing. Pure-black ordinary framing gives axes and
+text a consistent reference. Full frames do not imply four sets of ticks.
 
 Panel letters are geometric anchors to each left/top frame, not to variable text extents.
 Ordinary grids can align left axes. Mixed axis/colourbar layouts instead balance complete

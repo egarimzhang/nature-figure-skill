@@ -31,18 +31,18 @@ Always read [layout-contract.md](references/layout-contract.md) and
 styling. This is the user's chemistry template, not a claim of universal Nature compliance.
 Only a specified submission target warrants checking its current official requirements.
 
-- Final-size three-panel reference: 180 mm total width; ordinary plot rectangles
-  46 × 35.38 mm (1.3:1). Axis text 8 pt, annotations/legends 7.5 pt, panel letters
-  12 pt; all Arial, with Arial Italic for physical symbols. No silent font substitution.
-- Full frame, dark-grey axes/text, 0.75 pt axes, 1.125 pt curves, 4.5 pt point-line
-  markers. Row and column frame-to-frame gaps start at 14 mm, including labels and legends;
+- Final-size three-panel reference: 160 mm total width; ordinary plot rectangles
+  39 × 31.2 mm (1.25:1). Axis titles/ticks 6 pt, annotations/legends 6 pt, panel letters
+  10 pt bold; all Arial, with Arial Italic for physical symbols. No silent font substitution.
+- Full frame, pure-black ordinary axes/text (#000000), 0.75 pt axes, 1.125 pt curves, 4.5 pt point-line
+  markers. Row and column frame-to-frame gaps start at 14 and 16 mm, respectively, including labels and legends;
   bar margins use outer edges. Axis titles
   write quantities followed by parenthesized units, such as `Current density (mA cm$^{-2}$)`.
   After setting major x ticks, omit x minor ticks when the distinct observed x positions
   correspond one-to-one with major ticks; otherwise use one unnumbered midpoint minor
   tick per interval. See layout-contract.md for log/categorical axes.
-- Preserve the 8 pt axis-title size first. For a long title, try moving it within the
-  panel envelope, wrapping it, or shortening tick numbers with a multiplier; shrink
+- Preserve the 6 pt axis-title size first. Keep titles on one line when they fit; for a long title, try moving it within the
+  panel envelope, shortening tick numbers with a multiplier, or wrapping only when needed; shrink
   the title only if these do not yield a balanced layout. Keep plot frames aligned.
 - Anchor panel letters to the plot's left/top frame with physical offsets, never
   to axis-title bounds. Ordinary grids align left axes; mixed layouts may adjust
@@ -60,7 +60,7 @@ Only a specified submission target warrants checking its current official requir
   retain their separate translucent gradients. Three-layer stacks
   use main/mid/light; four-layer stacks add outline below main. Cyan/blue/violet remain
   one-anchor auxiliaries. Never add a colour solely because more data rows exist.
-- Bar error bars are neutral dark and topmost. Point-line error bars use family outline
+- Bar error bars are neutral black and topmost. Point-line error bars use family outline
   where overlap needs series identity. Keep readable grey references and explicit
   uncertainty semantics; do not invent SD for observations without replicates.
 
