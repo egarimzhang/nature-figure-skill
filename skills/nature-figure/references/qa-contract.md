@@ -1,14 +1,17 @@
 # Figure QA contract
 
-Use the selected backend exclusively for plotting and visual QA. Inspect exported SVG/PDF
-and a raster preview, not only a successful script exit. These personal defaults are not
+Use the selected backend exclusively for plotting and visual QA. Inspect the exported
+TIFF at final dimensions, not only a successful script exit. Inspect SVG/PDF only when
+requested; a temporary in-memory display may help visual QA but is not a delivered PNG.
+These personal defaults are not
 a statement of universal journal compliance; verify a specified submission's official guide.
 
 ## Observable checks
 
 - Correct final physical canvas/plot dimensions; no independent panel scaling or tight crop.
-- Arial regular/italic are available and actually used. SVG text nodes remain editable;
-  no unannounced fallback fonts, outlined text, mismatched mathematical font or clipped labels.
+- Arial regular/italic are available and actually used; no unannounced fallback
+  fonts, mismatched mathematical font or clipped labels. When SVG is requested,
+  verify that its text nodes remain editable rather than outlined.
 - Axis labels/ticks 6 pt; ordinary labels 6 pt; lowercase panels 10 pt, bold, with baseline 1 mm above the frame top.
 - Axis/tick strokes 0.75 pt and #000000; curves 1.125 pt. Full frames once per side.
 - Point-line and legend markers 4.5 pt, edges 0.6 pt; dense spectral raw points are separate.
@@ -29,8 +32,9 @@ a statement of universal journal compliance; verify a specified submission's off
   Two equal active primary categories; no silent on-request extension. When authorized, prefer
   the active scheme's on-request order; keep Primary 3/4 mutually exclusive. Primary keys are primary1/primary2/primary3/primary4, not auxiliary blue. Do not auto-create auxiliary four-level ladders.
   Check requested layer counts and do not add errors to a no-error stack.
-- Ordinary bars use opaque top-main/bottom-mid gradients without outlines; peak gradients remain readable/translucent. Native SVG gradient stops;
-  intentional raster intensity maps disclosed, with editable labels and matrix data.
+- Ordinary bars use opaque top-main/bottom-mid gradients without outlines; peak
+  gradients remain readable/translucent. When SVG is requested, check native gradient
+  stops. Disclose intentional raster intensity maps and retain their source matrices.
 - Plot limits include all observations/errors and meaningful zero baselines; bounded
   percentages do not silently clip overflow. Breaks/normalization/offsets are explicit.
 - Bars with replicates show mean and sample SD only, with no individual dots; raw observations remain in source data. Neutral bar errors sit topmost. Point-line errors use family outline.
@@ -53,7 +57,12 @@ Preserve scientific image aspect and channels; global adjustments must be disclo
 
 ## Export bundle
 
-Fixed-size SVG with editable text/native gradients; PDF; PNG preview; TIFF as needed.
-PDF gradients may be vector strips rather than a single editable gradient object.
-Raster maps may remain embedded raster objects; identify them and retain source matrices.
-Use dpi 300 for preview and 600 for TIFF by default, subject to the actual export request.
+By default, deliver organized plotting data, a reproducible standalone source script
+and a fixed-size TIFF at 600 dpi. Preserve raw observations as well as processed
+plotting values, units and uncertainty definitions; do not change data for appearance.
+Keep SVG generation in the source as an opt-in path. Generate and inspect editable SVG
+text/native gradients only when requested. PDF and PNG are not default deliverables;
+produce them only for an explicit user or journal requirement. Raster maps may remain
+embedded raster objects; identify them and retain source matrices. Verify TIFF pixel
+dimensions, resolution metadata, visual legibility and clipping. Reopen the actual TIFF
+for final QA. Do not save a separate PNG solely to fulfill a preview requirement.

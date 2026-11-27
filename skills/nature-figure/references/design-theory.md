@@ -25,5 +25,6 @@ encodings that look like unlabelled data. Preserve categorical and continuous se
 Error bars, source definitions, scale choices and integrity are part of figure design.
 No undocumented fits, smoothing, offsets, per-trace normalization or truncated intervals.
 Legibility is checked on rendered outputs at final dimensions, not only a zoomed screen.
-Keep an editable source and SVG; verify target-journal requirements when actually preparing
-that submission, while distinguishing them from these personal defaults.
+Keep editable source and a final-size TIFF; generate SVG only when requested.
+Verify target-journal requirements when preparing that submission, while
+distinguishing them from these personal defaults.

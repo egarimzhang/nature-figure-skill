@@ -32,8 +32,7 @@ all of the following:
 
 - plotting scripts;
 - mock/simulated data examples that include plotting;
-- preview PNG/TIFF files;
-- SVG/PDF/TIFF exports;
+- TIFF exports and any explicitly requested SVG/PDF/PNG files;
 - visual QA renders and final layout checks.
 
 Do not generate a substitute preview or export with the non-selected backend. For
@@ -89,8 +88,8 @@ Use direct language:
 
 ```text
 For this figure I recommend R because the main burden is ComplexHeatmap-style
-omics annotation and patchwork assembly. I will still keep the export contract
-SVG/PDF/TIFF with editable text.
+omics annotation and patchwork assembly. I will still keep the default TIFF,
+organized data and reproducible source deliverables.
 ```
 
 ```text

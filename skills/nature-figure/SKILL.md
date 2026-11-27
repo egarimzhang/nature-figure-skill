@@ -67,7 +67,8 @@ Only a specified submission target warrants checking its current official requir
 Python implementations are [publication_colors.py](scripts/publication_colors.py) and
 [publication_style.py](scripts/publication_style.py). Read [api.md](references/api.md)
 for signatures. Copy needed definitions into delivered scripts so outputs do not depend
-on the installed skill path. Use the native-gradient SVG exporter on a fixed canvas.
+on the installed skill path. Keep the native-gradient SVG exporter available for
+on-request use on a fixed canvas; do not invoke it by default.
 
 For R, read [r-workflow.md](references/r-workflow.md); implement identical physical
 parameters in R without invoking Python for rendering. Do not confuse ggplot's mm
@@ -83,10 +84,14 @@ Do not expose private attachment filenames, template paths or private-material p
 in prose, legends or code comments. Link user-facing deliverables normally; disclose
 private sources only when the user asks for that audit trail.
 
-Validate with [qa-contract.md](references/qa-contract.md) before delivery. Inspect rendered
-exports at final dimensions: text collisions, clipping, colour distinction, frame/label
-alignment and readable error bars. Provide editable SVG/PDF, preview PNG and reproducible
-source/data; TIFF when requested or appropriate. Keep a stable canvas and physical sizes.
+Validate with [qa-contract.md](references/qa-contract.md) before delivery. Inspect the
+final TIFF at its physical dimensions for text collisions, clipping, colour distinction,
+frame/label alignment and readable error bars. By default, deliver the organized
+plotting data, a 600 dpi TIFF and reproducible standalone source for each figure.
+Keep SVG export available in the source but disabled unless requested; then generate
+and QA the editable SVG from that source. Do not export PDF or PNG by default.
+Explicit user or journal requirements override these delivery defaults. Keep a
+stable canvas and physical sizes.
 
 ## Supporting references
 
