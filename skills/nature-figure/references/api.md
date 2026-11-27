@@ -47,8 +47,12 @@ ax.set_xticks([300,500,700])
 set_x_minor_ticks_from_data(ax,[300,500,700])
 add_panel_label(ax,'a')
 # Plot real observations and supplied/defined errors here; set limits to include them.
-save_editable_svg(fig,'figure.svg')
-fig.savefig('figure.pdf',bbox_inches=None)
+# Export the organized plotting data alongside this standalone script.
+fig.savefig('figure.tiff',dpi=600,bbox_inches=None,
+            pil_kwargs={'compression':'tiff_lzw'})
+export_svg=False  # enable on explicit request
+if export_svg:
+    save_editable_svg(fig,'figure.svg')
 ```
 
 ## Colours and gradients
@@ -80,8 +84,9 @@ fig.savefig('figure.pdf',bbox_inches=None)
 - `gradient_peak(ax,x,y,family='primary1',baseline=0,alpha_base=.40,alpha_tip=.82)`:
   monotonic x, finite positive curve above constant baseline. Draw an outline separately.
 - `sequential_cmap(family='primary1')`, `diverging_cmap(scheme=...)`: numeric scales.
-- `save_editable_svg(fig, filename)`: after final layout, replace clipped gradient strips
-  by editable native SVG gradients. Fixed canvas required; ordinary savefig handles PDF/raster.
+- `save_editable_svg(fig, filename)`: optional on-request export after final layout;
+  replace clipped gradient strips by editable native SVG gradients. Fixed canvas required.
+  Ordinary savefig handles TIFF and any explicitly requested PDF/PNG.
 
 ## Stacked uncertainty
 

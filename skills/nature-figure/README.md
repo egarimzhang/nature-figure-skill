@@ -22,7 +22,9 @@ Earlier chemistry stress test: `python scripts/preview_template.py OUTPUT_DIRECT
 Compatibility entry point for the current six-colour palette test: `python scripts/preview_palette.py OUTPUT_DIRECTORY`.
 See [API](references/api.md), [tutorial](references/tutorials.md), [QA](references/qa-contract.md)
 and [R workflow](references/r-workflow.md). Backend selection persists within a conversation;
-no cross-language drawing fallback. Final scripts embed needed helpers and expose parameters.
+no cross-language drawing fallback. New figures default to organized plotting data,
+600 dpi TIFF and standalone source; SVG can be generated from the source on request.
+Final scripts embed needed helpers and expose parameters.
 
 Historical galleries and figures4papers assets are retained as layout/data-pattern examples,
 not active colour/font/size defaults. Origin: [figures4papers](https://github.com/ChenLiu-1996/figures4papers).
@@ -30,9 +32,9 @@ not active colour/font/size defaults. Origin: [figures4papers](https://github.co
 ## Example output gallery
 
 The images below are historical simulated mockups; their old typography/colours are not active defaults:
-editable SVG-first export, restrained semantic palettes, lowercase panel labels, and
-asymmetric multi-panel information architecture. They are PNG previews for README display;
-production use should still export SVG/PDF from the plotting script.
+restrained semantic palettes, lowercase panel labels, and asymmetric multi-panel
+information architecture. They are PNG previews for README display; new figures
+default to TIFF, organized data and source, with SVG available on request.
 
 | Figure | Preview | What the skill demonstrates |
 |--------|---------|-----------------------------|

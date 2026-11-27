@@ -56,7 +56,8 @@ When adapting a private template:
 - Keep useful data wrangling, statistics, and geoms.
 - Replace template-specific colors with the figure-level semantic palette.
 - Normalize to layout-contract.md: Arial 6 pt axis text, 6 pt ordinary text and 10 pt bold panel letters, anchored to the left/top frame.
-- Convert single-output PNG/PDF scripts to SVG/PDF/TIFF export.
+- Convert single-output PNG/PDF scripts to default TIFF export, with SVG available
+  on request and PDF/PNG only when explicitly required.
 - Remove decorative elements that do not support the core conclusion.
 - Ensure each statistical comparison has `n`, center, spread, test, and correction
   information in the legend or source-data notes.

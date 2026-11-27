@@ -24,7 +24,7 @@ define the scientific claim, pick Python or R, and only then adapt a demo patter
 2. Read the listed `plot_*.py` files for layout, palette, axis, legend, and export
    patterns.
 3. Reuse the pattern, not the demo data or manuscript-specific labels.
-4. Preserve editable SVG/PDF/TIFF export rules from `api.md`.
+4. Preserve the default TIFF and on-request SVG export rules from `api.md`.
 5. Do not reveal local repository paths or internal asset filenames in user-facing
    prose unless the user asks for an audit trail.
 

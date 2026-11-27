@@ -48,11 +48,13 @@ compute cumulative sums per replicate before SD/SEM. State error definitions/n.
 
 Use parenthesized units and italic physical symbols with Arial glyphs. Preserve 6 pt axis
 titles first; keep them on one line when they fit, then move, shorten tick numbers with a multiplier, or wrap before reducing size.
-Keep titles inside the decorated panel and plot frames aligned. Export SVG/PDF
-at exact canvas size; retain editable text and native gradients when the selected R
-implementation supports them, otherwise disclose rasterized fills and keep adjustable
-source. PNG/TIFF can use ragg at appropriate dpi. Reopen exports using R-side tooling
-and check final-size legibility, clipping, alignment and font fidelity.
+Keep titles inside the decorated panel and plot frames aligned. Export TIFF at
+exact canvas size and 600 dpi by default, with organized plotting data and
+reproducible R source. Keep SVG export available but disabled until requested;
+then retain editable text and native gradients when the selected R implementation
+supports them, or disclose rasterized fills. Export PDF/PNG only when explicitly
+requested. Reopen the TIFF using R-side tooling and check final-size legibility,
+clipping, alignment and font fidelity.
 
 The Python helpers/preview are executed tests for Python only; do not claim they validate
 R rendering. R-specific rendering must be tested when an R figure is actually requested.

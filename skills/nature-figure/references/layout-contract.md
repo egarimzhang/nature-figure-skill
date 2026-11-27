@@ -142,6 +142,9 @@ Do not cover observations/errors/peaks. Reserve top space for panel letters and 
 
 Draw directly at final physical size. Do not independently scale panel exports while
 assembling a composite. Keep canvas bounds (no automatic tight crop that shifts origins).
-SVG native gradients and editable text; PDF may contain vector gradient strips. Disclose
-intentional raster maps while retaining editable axes, labels and source data. Keep all
-colours/positions/alpha settings centralized in the delivered standalone script.
+Export the TIFF at 600 dpi by default and inspect that file at final size. Retain
+the SVG exporter in the standalone source, but run it only on request; its output
+must have native gradients and editable text. If PDF is explicitly requested, its
+gradients may contain vector strips. Disclose intentional raster maps and retain
+their source data. Keep all colours/positions/alpha settings centralized in the
+delivered standalone script.

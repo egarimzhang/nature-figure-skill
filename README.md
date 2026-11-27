@@ -10,7 +10,7 @@
 
 基于 [`Yuan1z0825/nature-skills`](https://github.com/Yuan1z0825/nature-skills) 快照的开源衍生仓库，
 在上游 `nature-figure` 之上补齐了一套可审查的配图生产工作流：
-**图表契约 · 阻断式后端门禁 · 独立图集导出 · 语义配色 · Python / R 单后端全套交付**。
+**图表契约 · 默认 Python · 独立图集导出 · 语义配色 · 单后端绘制与按需导出**。
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Upstream](https://img.shields.io/badge/upstream-Yuan1z0825%2Fnature--skills-2f5fb8.svg)](https://github.com/Yuan1z0825/nature-skills)
@@ -46,22 +46,23 @@
 ## ✨ 本仓库改进了什么（全部可对代码）
 
 修改围绕三个主题；
-每条规则都配了可直接调用的模式或 helper，下文代码均摘自仓库。
+每条规则都配了可直接调用的模式或 helper，下文代码展示其使用方式。
 
 <img src="assets/figure-workflow.svg" alt="上游工作流骨架与本仓库三项扩展的组成" width="100%"/>
 
 ### ① 独立图集导出：三张图就是三张图
 
-新增规则：要求画多张独立图时，**禁止静默拼成一张大拼图**；每张图独立导出
-SVG 主文件 + 投稿伴生版，并共享字体、轴措辞、颜色语义与统计精度
+新增规则：要求画多张独立图时，**禁止静默拼成一张大拼图**；每张图默认交付
+整理后的绘图数据、600 dpi TIFF 和可复现源码，SVG 按需生成，并共享字体、轴措辞、颜色语义与统计精度
 （[`SKILL.md`](skills/nature-figure/SKILL.md)、[`references/common-patterns.md`](skills/nature-figure/references/common-patterns.md) Pattern 2b）。
 
 ```python
-def save_pub_set(fig, out_dir, stem, dpi=600):
+def save_pub_set(fig, out_dir, stem, export_svg=False):
     out_dir.mkdir(exist_ok=True)
-    fig.savefig(out_dir / f'{stem}.svg', bbox_inches='tight')
-    fig.savefig(out_dir / f'{stem}.pdf', bbox_inches='tight')
-    fig.savefig(out_dir / f'{stem}.png', dpi=dpi, bbox_inches='tight')
+    fig.savefig(out_dir / f'{stem}.tiff', dpi=600, bbox_inches=None,
+                pil_kwargs={'compression': 'tiff_lzw'})
+    if export_svg:
+        save_editable_svg(fig, out_dir / f'{stem}.svg')
     plt.close(fig)
 ```
 
@@ -110,14 +111,14 @@ PALETTE_BLUE_ROSE = {         # 一致性/偏差双族图：冷色=一致，玫�
 
 ## 🏛️ 继承自上游的能力（署名归上游）
 
-以下能力在基线 [`f3941a1`](https://github.com/Yuan1z0825/nature-skills/commit/f3941a1722e39af78b24bc7a34167b8880629545)
-中已经存在，本快照原样继承、**未做修改**，也不计为本仓库的贡献：
+以下能力源于基线 [`f3941a1`](https://github.com/Yuan1z0825/nature-skills/commit/f3941a1722e39af78b24bc7a34167b8880629545)，
+原有工作流不计为本仓库的贡献；下列后端与交付默认值已按本仓库需求调整：
 
 - **图表契约**：先写一句话核心结论、证据链、面板角色与导出契约，再动代码。
-- **阻断式后端门禁**：未选「Python or R」不画任何图；选定后单后端贯穿绘制/预览/导出/QA，缺依赖即停、不跨语言代画。
+- **单后端工作流**：默认 Python，明确指定时使用 R；同一后端贯穿绘制、导出与 QA，缺依赖即停。
 - **隐私规则**：私有路径、文件名、模板来源不进入图、图注与稿件文本。
-- **Python / R 双后端快速上手与导出规范**：可编辑 SVG（`svg.fonttype="none"`）、
-  TrueType PDF（`pdf.fonttype=42`）、600 dpi TIFF 等交付标准。
+- **Python / R 双后端快速上手与导出规范**：默认交付 600 dpi TIFF、整理数据和源码；
+  可编辑 SVG（`svg.fonttype="none"`）按需导出。
 
 完整上游工作流见 [Yuan1z0825/nature-skills](https://github.com/Yuan1z0825/nature-skills)。
 
@@ -151,10 +152,10 @@ PALETTE_BLUE_ROSE = {         # 一致性/偏差双族图：冷色=一致，玫�
 本工作流的交付不是「一张位图」，而是**每张图一组文件**：
 
 ```text
-figure-01.svg    ← 主产物：文字保持可编辑，编辑部可直接改字
-figure-01.pdf    ← TrueType 嵌入，投稿伴生版
-figure-01.tiff   ← 600 dpi，满足多数期刊印刷要求
-figure-01.png    ← 预览/演示用
+figure-01.tiff       ← 默认图像产物，600 dpi
+figure-01.py         ← 可复现绘图源码（明确选 R 时为 .R）
+figure-01-data.csv   ← 整理后的绘图数据（多表时可分文件）
+figure-01.svg        ← 仅在明确需要可编辑矢量图时导出
 ```
 
 同一图集内的所有图共享字体、轴措辞、颜色语义与统计精度——返修时改一处，整套图一致更新。
@@ -164,13 +165,13 @@ figure-01.png    ← 预览/演示用
 
 | 场景 | 你可以这样问 |
 |---|---|
-| 画投稿级配图 | “根据这段结果画 Figure 3，投稿用，Python。” |
+| 画投稿级配图 | “根据这段结果画 Figure 3，投稿用。” |
 | 多张独立图 | “这三组结果分别出三张独立图，不要拼在一起。” |
 | 指定颜色 | “用我给的颜色：A 方法蓝、B 方法同族浅蓝、对照灰。” |
 | 修图返修 | “审稿人说图例挡住数据了，重排 Figure 2 布局。” |
 | 组图统一 | “Figure 1–4 的字体、轴措辞和统计格式统一一遍。” |
 
-标准工作顺序：图表契约 → 后端门禁 → 单后端绘制 → 布局与 QA → 独立导出 → 交付清单。
+标准工作顺序：图表契约 → 确定后端（默认 Python）→ 绘制 → TIFF 布局与 QA → 独立导出 → 交付清单。
 
 ## 📚 快照还包含什么
 

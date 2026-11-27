@@ -47,4 +47,6 @@ Positive decomposed/fitted peaks such as XPS use a peak gradient rather than the
 
 Axes, ticks, titles, bar errors and ordinary text use `#000000`. Series annotations may use the series colour; white text on a dark fill is a readability exception. Continuous intensity uses an ordered scale and interpretable colourbar. Signed changes use a meaningful neutral centre; `diverging_cmap(scheme=...)` uses the active pair. State reference and sign convention for difference maps. Keep source matrices for raster maps and document normalization, offsets and interpolation.
 
-Deliver standalone editable Python, native SVG gradients, fixed-size SVG/PDF and preview PNG. Manual SVG edits do not update Python. See `tutorials.md` for maintained synthetic previews.
+Deliver organized plotting data, standalone editable Python and a fixed-size TIFF
+by default. Preserve native SVG gradient export in the source for explicit requests;
+manual SVG edits do not update Python. See `tutorials.md` for maintained synthetic previews.
